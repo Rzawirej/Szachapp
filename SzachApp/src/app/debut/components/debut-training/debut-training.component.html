@@ -1,9 +1,31 @@
-<div id="board1" style="width: 30%"></div>
-<button (click)="validatePosition()">Reset</button>
+<div style="width: 40%;">
+<div id="board1" style="width: 300px"></div>
+<button mat-icon-button (click)="prevMove()">
+  <mat-icon>navigate_before</mat-icon>
+</button>
+<button mat-icon-button (click)="nextMove()">
+  <mat-icon>navigate_next</mat-icon>
+</button>
+
 
 <div class="form-group">
-    <label for="file">Choose File</label>
-    <input type="file"
-           id="file"
-           (change)="handleFileInput($event.target.files)">
+
+  <label for="file">Choose File</label>
+  <input type="file" id="file" (change)="handleFileInput($event.target.files)">
 </div>
+
+<!--<button (click)="validatePosition()">Reset</button>--->
+</div>
+
+<mat-card style="width: 40%;">
+  {{playersString}}
+  <br>
+  {{gameString}}
+</mat-card>
+<button mat-icon-button (click)="prevGame()">
+  <mat-icon>navigate_before</mat-icon>
+</button>
+<button mat-icon-button (click)="nextGame()">
+  <mat-icon>navigate_next</mat-icon>
+</button>
+

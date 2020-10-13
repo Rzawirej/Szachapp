@@ -8,14 +8,11 @@ declare var ChessBoard: any;
 export class DebutBoardService {
   board: any;
   game = new Chess();
-
-  constructor(){
-
-  }
+  halfMoveNumber: number = 0;
 
   init(id: string){
     const config = {
-      draggable: true,
+      draggable: false,
       position: 'start',
       onDragStart: this.onDragStart,
       onDrop: this.onDrop,
@@ -48,5 +45,36 @@ export class DebutBoardService {
   }
   resize(){
     this.board.resize();
+  }
+
+  randomMove(){
+    const moves = this.game.moves()
+    const move = moves[Math.floor(Math.random() * moves.length)]
+    this.game.move(move)
+    this.board.position(this.game.fen());
+  }
+
+  undoMove(){
+    this.game.undo()
+    this.board.position(this.game.fen());
+    if(this.halfMoveNumber>0){
+      this.halfMoveNumber--;
+    }
+  }
+
+  nextMove(parsedGame){
+    if(!parsedGame){
+      return;
+    }
+    if (this.halfMoveNumber < parsedGame.moves.length){
+      this.game.move(parsedGame.moves[this.halfMoveNumber].move)
+      this.board.position(this.game.fen());
+      this.halfMoveNumber++;
+    }
+  }
+  restart(){
+    this.game = new Chess();
+    this.board.position(this.game.fen());
+    this.halfMoveNumber = 0;
   }
 }
