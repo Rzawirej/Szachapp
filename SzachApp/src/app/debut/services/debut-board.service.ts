@@ -72,9 +72,40 @@ export class DebutBoardService {
       this.halfMoveNumber++;
     }
   }
+
   restart(){
     this.game = new Chess();
     this.board.position(this.game.fen());
     this.halfMoveNumber = 0;
+  }
+
+  goToMove(move, parsedGame){
+    this.game = new Chess();
+    this.halfMoveNumber = move.halfMoveNumber;
+    let branchHistoryNumber = -1;
+    let branchHistoryIter = -1;
+    let branchHistoryRav = -1;
+    if(move.branch_history.length > 0){
+      branchHistoryIter = 0;
+      branchHistoryNumber = move.branch_history[branchHistoryIter].halfMoveNumber;
+      branchHistoryRav = move.branch_history[branchHistoryIter].rav;
+    }
+
+    for(let i = 0; i < this.halfMoveNumber; i++){
+      if (branchHistoryNumber-1 === i){
+        if (branchHistoryIter + 1 < move.branch_history.length){
+          branchHistoryIter++;
+          branchHistoryNumber = move.branch_history[branchHistoryIter].halfMoveNumber;
+          branchHistoryRav = move.branch_history[branchHistoryIter].rav;
+        }
+      }
+      if (branchHistoryNumber !== -1 && branchHistoryNumber-1 <= i){
+        this.game.move(parsedGame.moves[branchHistoryNumber - 1].ravs[branchHistoryRav].moves[i - branchHistoryNumber + 1].move)
+      }else{
+        this.game.move(parsedGame.moves[i].move)
+      }
+
+    }
+    this.board.position(this.game.fen());
   }
 }

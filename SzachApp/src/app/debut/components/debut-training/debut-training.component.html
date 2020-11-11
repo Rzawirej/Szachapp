@@ -1,31 +1,49 @@
-<div style="width: 40%;">
-<div id="board1" style="width: 300px"></div>
-<button mat-icon-button (click)="prevMove()">
-  <mat-icon>navigate_before</mat-icon>
-</button>
-<button mat-icon-button (click)="nextMove()">
-  <mat-icon>navigate_next</mat-icon>
-</button>
+<div style="display: flex; flex-direction: row;">
+  <div style="width: 60%;">
 
 
-<div class="form-group">
+    <div style="width: 40%;">
+      <div id="board1" style="width: 300px">
+      </div>
+      <button mat-icon-button (click)="prevMove()">
+        <mat-icon>navigate_before</mat-icon>
+      </button>
+      <button mat-icon-button (click)="nextMove()">
+        <mat-icon>navigate_next</mat-icon>
+      </button>
 
-  <label for="file">Choose File</label>
-  <input type="file" id="file" (change)="handleFileInput($event.target.files)">
+
+      <div class="form-group">
+
+        <label for="file">Choose File</label>
+        <input type="file" id="file" (change)="handleFileInput($event.target.files)">
+      </div>
+    </div>
+  </div>
+
+  <div style="width: 30%;">
+    <mat-card>
+      {{playersString}}
+      <br>
+      <span *ngFor="let move of moveArray" (click)="goToMove($event, move)" style="cursor: pointer;">
+        <ng-container *ngTemplateOutlet="moveTemplate; context:{ move: move }"></ng-container>
+      </span>
+      <ng-template #moveTemplate let-move="move">
+        <span *ngIf="move.color === 'white'">{{move.move_number+' '}}</span>
+        <span>{{move.move+' '}}</span>
+        <span *ngFor="let branchMove of move.branch; let first = first; let last = last" (click)="goToMove($event, branchMove)" style="cursor: pointer;">
+          <span *ngIf="first">(</span>
+          <ng-container *ngTemplateOutlet="moveTemplate; context:{ move: branchMove }"></ng-container>
+          <span *ngIf="last">)</span>
+        </span>
+      </ng-template>
+      {{gameResult}}
+    </mat-card>
+    <button mat-icon-button (click)="prevGame()">
+      <mat-icon>navigate_before</mat-icon>
+    </button>
+    <button mat-icon-button (click)="nextGame()">
+      <mat-icon>navigate_next</mat-icon>
+    </button>
+  </div>
 </div>
-
-<!--<button (click)="validatePosition()">Reset</button>--->
-</div>
-
-<mat-card style="width: 40%;">
-  {{playersString}}
-  <br>
-  {{gameString}}
-</mat-card>
-<button mat-icon-button (click)="prevGame()">
-  <mat-icon>navigate_before</mat-icon>
-</button>
-<button mat-icon-button (click)="nextGame()">
-  <mat-icon>navigate_next</mat-icon>
-</button>
-
