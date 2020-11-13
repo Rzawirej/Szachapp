@@ -25,16 +25,17 @@
     <mat-card>
       {{playersString}}
       <br>
-      <span *ngFor="let move of moveArray" (click)="goToMove($event, move)" style="cursor: pointer;">
-        <ng-container *ngTemplateOutlet="moveTemplate; context:{ move: move }"></ng-container>
+      <span *ngFor="let move of moveArray; let first = first" (click)="goToMove($event, move)" style="cursor: pointer;">
+        <ng-container *ngTemplateOutlet="moveTemplate; context:{ move: move, first: first}"></ng-container>
       </span>
-      <ng-template #moveTemplate let-move="move">
+      <ng-template #moveTemplate let-move="move" let-first="first">
         <span *ngIf="move.color === 'white'">{{move.move_number+' '}}</span>
+        <span *ngIf="move.color === 'black' && first">{{move.move_number+'... '}}</span>
         <span>{{move.move+' '}}</span>
-        <span *ngFor="let branchMove of move.branch; let first = first; let last = last" (click)="goToMove($event, branchMove)" style="cursor: pointer;">
-          <span *ngIf="first">(</span>
-          <ng-container *ngTemplateOutlet="moveTemplate; context:{ move: branchMove }"></ng-container>
-          <span *ngIf="last">)</span>
+        <span *ngFor="let branchMove of move.branch; let last = last" (click)="goToMove($event, branchMove)" style="cursor: pointer;">
+          <span *ngIf="branchMove.isBranchStart">(</span>
+          <ng-container *ngTemplateOutlet="moveTemplate; context:{ move: branchMove, first: branchMove.isBranchStart}"></ng-container>
+          <span *ngIf="last">)&nbsp;</span>
         </span>
       </ng-template>
       {{gameResult}}

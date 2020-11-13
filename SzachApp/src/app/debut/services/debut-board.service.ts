@@ -9,6 +9,8 @@ export class DebutBoardService {
   board: any;
   game = new Chess();
   halfMoveNumber: number = 0;
+  currentBranch: any;
+  currentBranchStartHalfMoveNumber: number;
 
   init(id: string){
     const config = {
@@ -66,8 +68,12 @@ export class DebutBoardService {
     if(!parsedGame){
       return;
     }
+    if(this.currentBranch === undefined){
+      this.currentBranch = parsedGame.moves;
+    }
+    console.log(this.currentBranch, this.halfMoveNumber);
     if (this.halfMoveNumber < parsedGame.moves.length){
-      this.game.move(parsedGame.moves[this.halfMoveNumber].move)
+      this.game.move(this.currentBranch[this.halfMoveNumber - this.currentBranchStartHalfMoveNumber].move)
       this.board.position(this.game.fen());
       this.halfMoveNumber++;
     }
@@ -82,30 +88,32 @@ export class DebutBoardService {
   goToMove(move, parsedGame){
     this.game = new Chess();
     this.halfMoveNumber = move.halfMoveNumber;
-    let branchHistoryNumber = -1;
-    let branchHistoryIter = -1;
-    let branchHistoryRav = -1;
-    if(move.branch_history.length > 0){
-      branchHistoryIter = 0;
-      branchHistoryNumber = move.branch_history[branchHistoryIter].halfMoveNumber;
-      branchHistoryRav = move.branch_history[branchHistoryIter].rav;
+    const branchInfo = {
+      nextNumber: -1,
+      currentNumber: 0,
+      historyIter: -1,
+      ravNumber: -1
     }
-
+    if(move.branch_history.length > 0){
+      branchInfo.historyIter = 0;
+      branchInfo.nextNumber = move.branch_history[branchInfo.historyIter].halfMoveNumber-1;
+      branchInfo.ravNumber = move.branch_history[branchInfo.historyIter].rav;
+    }
+    let currentBranch = parsedGame.moves;
     for(let i = 0; i < this.halfMoveNumber; i++){
-      if (branchHistoryNumber-1 === i){
-        if (branchHistoryIter + 1 < move.branch_history.length){
-          branchHistoryIter++;
-          branchHistoryNumber = move.branch_history[branchHistoryIter].halfMoveNumber;
-          branchHistoryRav = move.branch_history[branchHistoryIter].rav;
+      if (branchInfo.nextNumber === i){
+        currentBranch = currentBranch[branchInfo.nextNumber - branchInfo.currentNumber].ravs[branchInfo.ravNumber].moves;
+        branchInfo.currentNumber = branchInfo.nextNumber;
+        if (branchInfo.historyIter + 1 < move.branch_history.length){
+          branchInfo.historyIter++;
+          branchInfo.nextNumber = move.branch_history[branchInfo.historyIter].halfMoveNumber-1;
+          branchInfo.ravNumber = move.branch_history[branchInfo.historyIter].rav;
         }
       }
-      if (branchHistoryNumber !== -1 && branchHistoryNumber-1 <= i){
-        this.game.move(parsedGame.moves[branchHistoryNumber - 1].ravs[branchHistoryRav].moves[i - branchHistoryNumber + 1].move)
-      }else{
-        this.game.move(parsedGame.moves[i].move)
-      }
-
+      this.game.move(currentBranch[i - branchInfo.currentNumber].move);
     }
+    this.currentBranchStartHalfMoveNumber = branchInfo.currentNumber;
+    this.currentBranch = currentBranch;
     this.board.position(this.game.fen());
   }
 }

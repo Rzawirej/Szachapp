@@ -26,7 +26,7 @@ export class DebutTrainingComponent implements OnInit {
   playersString: string =""
   gameResult: string = "";
   moveArray = [];
-  //fileToUpload: File = null;
+
 
   handleFileInput(files: FileList) {
     let fileReader = new FileReader();
@@ -35,14 +35,6 @@ export class DebutTrainingComponent implements OnInit {
       this.gameToMoveArray();
     }
     fileReader.readAsText(files[0]);
-  }
-
-  uploadFileToActivity() {
-    //this.fileUploadService.postFile(this.fileToUpload).subscribe(data => {
-    // do something, if upload success
-    //}, error => {
-    //console.log(error);
-    //});
   }
 
   ngOnInit() {
@@ -55,7 +47,6 @@ export class DebutTrainingComponent implements OnInit {
 
   nextMove(){
     this.debutBoardService.nextMove(this.currentGame());
-    //this.debutBoardService.randomMove();
   }
 
   currentGame(){
@@ -89,15 +80,18 @@ export class DebutTrainingComponent implements OnInit {
   constructMove(move_info){
 
     const move = move_info.move;
-    const new_move = { move: move.move, color: move_info.color, move_number: move_info.move_number, branch: [], branch_history: move_info.branch_history, halfMoveNumber: move_info.halfMoveNumber };
+    const new_move = { move: move.move, color: move_info.color, move_number: move_info.move_number, branch: [], branch_history: move_info.branch_history, halfMoveNumber: move_info.halfMoveNumber, isBranchStart: move_info.isBranchStart };
     if (move.ravs) {
       for (let i = 0; i < move.ravs.length; i++) {
         const branch_history = JSON.parse(JSON.stringify(new_move.branch_history));
         branch_history.push({halfMoveNumber: move_info.halfMoveNumber, rav: i});
-        console.log(branch_history);
-        const branch_move_info = { move_number: move_info.move_number, move: undefined, color: move_info.color, halfMoveNumber: move_info.halfMoveNumber, branch_history: branch_history };
+        const branch_move_info = { move_number: move_info.move_number, move: undefined, color: move_info.color, halfMoveNumber: move_info.halfMoveNumber, branch_history: branch_history, isBranchStart: false };
+        let isBranchStart = true;
         move.ravs[i].moves.forEach((branch_move) => {
+
           branch_move_info.move = branch_move;
+          branch_move_info.isBranchStart = isBranchStart;
+          isBranchStart = false;
           const new_branch_move = this.constructMove(branch_move_info);
           new_move.branch.push(new_branch_move);
         });
