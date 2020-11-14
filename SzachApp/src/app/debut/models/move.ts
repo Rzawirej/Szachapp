@@ -9,4 +9,5 @@ export class Move {
   halfMoveNumber: number;
   isBranchStart?: boolean;
   ravs?: any[] = [];
+  id?: string;
 }

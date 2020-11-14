@@ -1,7 +1,5 @@
 <div style="display: flex; flex-direction: row;">
-  <div style="width: 60%;">
-
-
+  <div style="width: 60%;" >
     <div style="width: 40%;">
       <div id="board1" style="width: 300px">
       </div>
@@ -25,14 +23,14 @@
     <mat-card>
       {{playersString}}
       <br>
-      <span *ngFor="let move of moveArray; let first = first" (click)="goToMove($event, move)" style="cursor: pointer;">
+      <span *ngFor="let move of moveArray; let first = first;" (click)="goToMove($event, move)" style="cursor: pointer;">
         <ng-container *ngTemplateOutlet="moveTemplate; context:{ move: move, first: first}"></ng-container>
       </span>
-      <ng-template #moveTemplate let-move="move" let-first="first">
+      <ng-template #moveTemplate let-move="move" let-first="first" let-uniqeCode="uniqeCode">
         <span *ngIf="move.color === 'white'">{{move.move_number+' '}}</span>
         <span *ngIf="move.color === 'black' && first">{{move.move_number+'... '}}</span>
-        <span>{{move.move+' '}}</span>
-        <span *ngFor="let branchMove of move.branch; let last = last" (click)="goToMove($event, branchMove)" style="cursor: pointer;">
+        <span [ngClass]="{'highlight-move': highlight === move.id}">{{move.move+' '}}</span>
+        <span *ngFor="let branchMove of move.branch; let last = last;" (click)="goToMove($event, branchMove)" style="cursor: pointer;">
           <span *ngIf="branchMove.isBranchStart">(</span>
           <ng-container *ngTemplateOutlet="moveTemplate; context:{ move: branchMove, first: branchMove.isBranchStart}"></ng-container>
           <span *ngIf="last">)&nbsp;</span>

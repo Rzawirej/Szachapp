@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import Chess from "chess.js";
 import { BranchInfo } from '../models/branch-info';
+import { GameState } from '../models/game-state';
 import { Move } from '../models/move';
 import { ParsedGame } from '../models/parsed-game';
 import { ParsedMove } from '../models/parsed-move';
@@ -12,85 +13,86 @@ declare var ChessBoard: any;
 export class DebutBoardService {
   board: any;
   game = new Chess();
-  halfMoveNumber: number = 0;
-  currentBranch: ParsedMove[];
-  currentBranchStartHalfMoveNumber: number;
 
   init(boardId: string): void{
     const config = {
       draggable: false,
       position: 'start',
-      onDragStart: this.onDragStart,
-      onDrop: this.onDrop,
-      onSnapEnd: this.onSnapEnd
     }
     this.board = ChessBoard(boardId, config)
   }
-  onDragStart = (source, piece, position, orientation) => {
-    if (this.game.game_over()) return false
-    if (piece.search(new RegExp('^' + this.game.turn())) === -1) return false
-  }
 
-  onDrop = (source: string, target: string) => {
-    let move = this.game.move({
-      from: source,
-      to: target,
-      promotion: 'q' // NOTE: always promote to a queen for example simplicity
-    })
-
-    if (move === null) return 'snapback'
-  }
-
-  onSnapEnd = () => {
-    //need in case of castling and enpassant
-    this.board.position(this.game.fen());
-  }
+  /*
   validatePosition(): void{
     console.log(this.game.load(this.board.fen() + ' w - - 0 1'))
     console.log(this.game.moves())
   }
+  */
+
   resize(): void{
     this.board.resize();
   }
 
+  /*
   randomMove(): void{
     const moves = this.game.moves()
     const move = moves[Math.floor(Math.random() * moves.length)]
     this.game.move(move)
     this.board.position(this.game.fen());
   }
+  */
 
-  undoMove(): void{
-    this.game.undo()
+  undoMove(gameState: GameState): void{
     this.board.position(this.game.fen());
-    if(this.halfMoveNumber > 0){
-      this.halfMoveNumber--;
+    if (gameState.halfMoveNumber > 0){
+      gameState.halfMoveNumber--;
     }
   }
 
-  nextMove(parsedGame): void{
+  nextMove(parsedGame: ParsedGame, gameState: GameState): void{
+    console.log(gameState.lastMove.id);
     if(!parsedGame){
       return;
     }
-    if(this.currentBranch === undefined){
-      this.currentBranch = parsedGame.moves;
+    const branchInfo: BranchInfo = {
+      nextNumber: -1,
+      currentNumber: 0,
+      historyIter: -1,
+      ravNumber: -1
     }
-    if (this.halfMoveNumber < parsedGame.moves.length){
-      this.game.move(this.currentBranch[this.halfMoveNumber - this.currentBranchStartHalfMoveNumber].move)
-      this.board.position(this.game.fen());
-      this.halfMoveNumber++;
+    if (gameState.branchHistory.length > 0) {
+      gameState.branchHistory = gameState.branchHistory;
+      branchInfo.historyIter = 0;
+      branchInfo.nextNumber = gameState.branchHistory[branchInfo.historyIter].halfMoveNumber - 1;
+      branchInfo.ravNumber = gameState.branchHistory[branchInfo.historyIter].rav;
     }
+    let currentBranch = parsedGame.moves;
+    for (let i = 0; i < gameState.halfMoveNumber; i++) {
+      if (branchInfo.nextNumber === i) {
+        currentBranch = currentBranch[branchInfo.nextNumber - branchInfo.currentNumber].ravs[branchInfo.ravNumber].moves;
+        branchInfo.currentNumber = branchInfo.nextNumber;
+        if (branchInfo.historyIter + 1 < gameState.branchHistory.length) {
+          branchInfo.historyIter++;
+          branchInfo.nextNumber = gameState.branchHistory[branchInfo.historyIter].halfMoveNumber - 1;
+          branchInfo.ravNumber = gameState.branchHistory[branchInfo.historyIter].rav;
+        }
+      }
+    }
+    this.game.move(currentBranch[gameState.halfMoveNumber - branchInfo.currentNumber].move);
+    this.board.position(this.game.fen());
+    gameState.halfMoveNumber++;
+
   }
 
-  restart(): void{
+  restart(gameState: GameState): void{
     this.game = new Chess();
     this.board.position(this.game.fen());
-    this.halfMoveNumber = 0;
+    gameState.halfMoveNumber = 0;
   }
 
-  goToMove(move: Move, parsedGame: ParsedGame): void{
+  goToMove(move: Move, parsedGame: ParsedGame, gameState: GameState): void{
     this.game = new Chess();
-    this.halfMoveNumber = move.halfMoveNumber;
+    gameState.halfMoveNumber = move.halfMoveNumber;
     const branchInfo: BranchInfo = {
       nextNumber: -1,
       currentNumber: 0,
@@ -98,12 +100,13 @@ export class DebutBoardService {
       ravNumber: -1
     }
     if(move.branch_history.length > 0){
+      gameState.branchHistory = move.branch_history;
       branchInfo.historyIter = 0;
       branchInfo.nextNumber = move.branch_history[branchInfo.historyIter].halfMoveNumber-1;
       branchInfo.ravNumber = move.branch_history[branchInfo.historyIter].rav;
     }
     let currentBranch = parsedGame.moves;
-    for(let i = 0; i < this.halfMoveNumber; i++){
+    for (let i = 0; i < gameState.halfMoveNumber; i++){
       if (branchInfo.nextNumber === i){
         currentBranch = currentBranch[branchInfo.nextNumber - branchInfo.currentNumber].ravs[branchInfo.ravNumber].moves;
         branchInfo.currentNumber = branchInfo.nextNumber;
@@ -115,8 +118,8 @@ export class DebutBoardService {
       }
       this.game.move(currentBranch[i - branchInfo.currentNumber].move);
     }
-    this.currentBranchStartHalfMoveNumber = branchInfo.currentNumber;
-    this.currentBranch = currentBranch;
+    gameState.currentBranchStartHalfMoveNumber = branchInfo.currentNumber;
+    gameState.currentBranch = currentBranch;
     this.board.position(this.game.fen());
   }
 }
