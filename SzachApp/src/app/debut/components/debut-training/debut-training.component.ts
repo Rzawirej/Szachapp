@@ -1,5 +1,9 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import pgnParser from 'pgn-parser';
+import { Move } from '../../models/move';
+import { MoveInfo } from '../../models/move-info';
+import { ParsedGame } from '../../models/parsed-game';
+import { ParsedMove } from '../../models/parsed-move';
 import { DebutBoardService } from '../../services/debut-board.service';
 
 
@@ -22,13 +26,16 @@ export class DebutTrainingComponent implements OnInit {
 
   title = 'szachapp';
   currentGameNumber: number = 0;
-  parsedGames = [];
+  parsedGames: ParsedGame[] = [];
   playersString: string =""
   gameResult: string = "";
-  moveArray = [];
+  moveArray: Move[];
 
+  ngOnInit(): void {
+    this.debutBoardService.init("board1");
+  }
 
-  handleFileInput(files: FileList) {
+  handleFileInput(files: FileList): void {
     let fileReader = new FileReader();
     fileReader.onload = (e) => {
       this.parsedGames = pgnParser.parse(fileReader.result);
@@ -37,15 +44,13 @@ export class DebutTrainingComponent implements OnInit {
     fileReader.readAsText(files[0]);
   }
 
-  ngOnInit() {
-    this.debutBoardService.init("board1");
-  }
 
-  prevMove(){
+
+  prevMove(): void{
     this.debutBoardService.undoMove();
   }
 
-  nextMove(){
+  nextMove(): void{
     this.debutBoardService.nextMove(this.currentGame());
   }
 
@@ -53,39 +58,37 @@ export class DebutTrainingComponent implements OnInit {
     return this.parsedGames ? this.parsedGames[this.currentGameNumber] : null;
   }
 
-  gameToMoveArray(){
-    let white;
-    let black;
+  gameToMoveArray(): void{
+    const players = {white: '', black: ''};
     this.moveArray = [];
-    console.log(this.parsedGames)
     this.currentGame().headers.forEach((header) => {
       if(header.name === "White"){
-        white = header.value;
+        players.white = header.value;
       }
       if(header.name === "Black"){
-        black = header.value;
+        players.black = header.value;
       }
     })
-    this.playersString = `${white} vs ${black}\n`
-    const move_info = {move_number: 1, move: undefined, color: 'white', halfMoveNumber: 1, branch_history: []};
-    this.currentGame().moves.forEach((move) => {
+    this.playersString = `${players.white} vs ${players.black}\n`
+    const move_info: MoveInfo = {move_number: 1, move: undefined, color: 'white', halfMoveNumber: 1, branch_history: []};
+    this.currentGame().moves.forEach((move: ParsedMove) => {
       move_info.move=move;
-      const new_move = this.constructMove(move_info);
+      const new_move: Move = this.constructMove(move_info);
       this.moveArray.push(new_move);
     });
     console.log(this.moveArray);
     this.gameResult = this.currentGame().result;
   }
 
-  constructMove(move_info){
+  constructMove(move_info: MoveInfo): Move{
 
     const move = move_info.move;
-    const new_move = { move: move.move, color: move_info.color, move_number: move_info.move_number, branch: [], branch_history: move_info.branch_history, halfMoveNumber: move_info.halfMoveNumber, isBranchStart: move_info.isBranchStart };
+    const new_move: Move = { move: move.move, color: move_info.color, move_number: move_info.move_number, branch: [], branch_history: move_info.branch_history, halfMoveNumber: move_info.halfMoveNumber, isBranchStart: move_info.isBranchStart };
     if (move.ravs) {
       for (let i = 0; i < move.ravs.length; i++) {
         const branch_history = JSON.parse(JSON.stringify(new_move.branch_history));
         branch_history.push({halfMoveNumber: move_info.halfMoveNumber, rav: i});
-        const branch_move_info = { move_number: move_info.move_number, move: undefined, color: move_info.color, halfMoveNumber: move_info.halfMoveNumber, branch_history: branch_history, isBranchStart: false };
+        const branch_move_info: MoveInfo = { move_number: move_info.move_number, color: move_info.color, halfMoveNumber: move_info.halfMoveNumber, branch_history: branch_history, isBranchStart: false };
         let isBranchStart = true;
         move.ravs[i].moves.forEach((branch_move) => {
 
@@ -105,7 +108,7 @@ export class DebutTrainingComponent implements OnInit {
     return new_move;
   }
 
-  prevGame(){
+  prevGame(): void{
     if(this.currentGameNumber > 0){
       this.currentGameNumber--;
       this.gameToMoveArray();
@@ -113,7 +116,7 @@ export class DebutTrainingComponent implements OnInit {
     }
   }
 
-  nextGame(){
+  nextGame(): void{
     if(this.currentGameNumber < this.parsedGames.length - 1){
       this.currentGameNumber++;
       this.gameToMoveArray();
@@ -121,7 +124,7 @@ export class DebutTrainingComponent implements OnInit {
     }
   }
 
-  goToMove($event, move){
+  goToMove($event, move): void{
     $event.stopPropagation();
     console.log(move);
     this.debutBoardService.goToMove(move, this.currentGame());

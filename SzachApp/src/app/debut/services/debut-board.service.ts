@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
 import Chess from "chess.js";
+import { BranchInfo } from '../models/branch-info';
+import { Move } from '../models/move';
+import { ParsedGame } from '../models/parsed-game';
+import { ParsedMove } from '../models/parsed-move';
 declare var ChessBoard: any;
 
 @Injectable({
@@ -9,10 +13,10 @@ export class DebutBoardService {
   board: any;
   game = new Chess();
   halfMoveNumber: number = 0;
-  currentBranch: any;
+  currentBranch: ParsedMove[];
   currentBranchStartHalfMoveNumber: number;
 
-  init(id: string){
+  init(boardId: string): void{
     const config = {
       draggable: false,
       position: 'start',
@@ -20,7 +24,7 @@ export class DebutBoardService {
       onDrop: this.onDrop,
       onSnapEnd: this.onSnapEnd
     }
-    this.board = ChessBoard(id, config)
+    this.board = ChessBoard(boardId, config)
   }
   onDragStart = (source, piece, position, orientation) => {
     if (this.game.game_over()) return false
@@ -41,37 +45,36 @@ export class DebutBoardService {
     //need in case of castling and enpassant
     this.board.position(this.game.fen());
   }
-  validatePosition() {
+  validatePosition(): void{
     console.log(this.game.load(this.board.fen() + ' w - - 0 1'))
     console.log(this.game.moves())
   }
-  resize(){
+  resize(): void{
     this.board.resize();
   }
 
-  randomMove(){
+  randomMove(): void{
     const moves = this.game.moves()
     const move = moves[Math.floor(Math.random() * moves.length)]
     this.game.move(move)
     this.board.position(this.game.fen());
   }
 
-  undoMove(){
+  undoMove(): void{
     this.game.undo()
     this.board.position(this.game.fen());
-    if(this.halfMoveNumber>0){
+    if(this.halfMoveNumber > 0){
       this.halfMoveNumber--;
     }
   }
 
-  nextMove(parsedGame){
+  nextMove(parsedGame): void{
     if(!parsedGame){
       return;
     }
     if(this.currentBranch === undefined){
       this.currentBranch = parsedGame.moves;
     }
-    console.log(this.currentBranch, this.halfMoveNumber);
     if (this.halfMoveNumber < parsedGame.moves.length){
       this.game.move(this.currentBranch[this.halfMoveNumber - this.currentBranchStartHalfMoveNumber].move)
       this.board.position(this.game.fen());
@@ -79,16 +82,16 @@ export class DebutBoardService {
     }
   }
 
-  restart(){
+  restart(): void{
     this.game = new Chess();
     this.board.position(this.game.fen());
     this.halfMoveNumber = 0;
   }
 
-  goToMove(move, parsedGame){
+  goToMove(move: Move, parsedGame: ParsedGame): void{
     this.game = new Chess();
     this.halfMoveNumber = move.halfMoveNumber;
-    const branchInfo = {
+    const branchInfo: BranchInfo = {
       nextNumber: -1,
       currentNumber: 0,
       historyIter: -1,
