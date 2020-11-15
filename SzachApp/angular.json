@@ -35,6 +35,9 @@
             ],
             "scripts": [
               "./src/assets/chessboardjs/js/chessboard-1.0.0.js"
+            ],
+            "allowedCommonJsDependencies": [
+                "chess.js"
             ]
           },
           "configurations": {

@@ -6,7 +6,7 @@ import { MoveInfo } from '../../models/move-info';
 import { ParsedGame } from '../../models/parsed-game';
 import { ParsedMove } from '../../models/parsed-move';
 import { DebutBoardService } from '../../services/debut-board.service';
-
+declare var ChessBoard: any;
 
 
 @Component({
@@ -22,25 +22,38 @@ export class DebutTrainingComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.debutBoardService.resize();
+    this.board.resize();
   }
 
-  title = 'szachapp';
-  currentGameNumber: number = 0;
+  board: any;
+  currentGameNumber = 0;
+  playersString = '';
+  gameResult = '';
+  highlight = '';
   parsedGames: ParsedGame[] = [];
-  playersString: string =""
-  gameResult: string = "";
-  moveArray: Move[];
-  highlight: string = '1.';
   gameState: GameState;
   ngOnInit(): void {
-    this.debutBoardService.init("board1");
+    const config = {
+      draggable: false,
+      position: 'start',
+    }
+    this.board = ChessBoard('board1', config)
+    this.board.resize();
+    this.initGameState();
+  }
 
+  initGameState(): void{
+    this.gameState = {
+      halfMoveNumber: 0,
+      currentBranch: [],
+      branchHistory: [],
+      moveArray: []
+    }
   }
 
   handleFileInput(files: FileList): void {
     let fileReader = new FileReader();
-    fileReader.onload = (e) => {
+    fileReader.onload = () => {
       this.parsedGames = pgnParser.parse(fileReader.result);
       this.gameToMoveArray();
     }
@@ -48,18 +61,29 @@ export class DebutTrainingComponent implements OnInit {
   }
 
   prevMove(): void{
-    this.debutBoardService.undoMove(this.gameState);
+    const [highlightId, fen] = this.debutBoardService.undoMove(this.gameState);
+    this.highlight = highlightId;
+    this.board.position(fen);
   }
 
   nextMove(): void{
-    this.debutBoardService.nextMove(this.currentGame(), this.gameState);
+    const [highlightId, fen] = this.debutBoardService.nextMove(this.gameState);
+    this.highlight = highlightId;
+    this.board.position(fen);
   }
 
+  goToMove($event, move: Move): void {
+    $event.stopPropagation();
 
+    const [highlightId, fen] = this.debutBoardService.goToMove(move, this.gameState);
+    this.highlight = highlightId;
+    this.board.position(fen);
+  }
 
   gameToMoveArray(): void{
     const players = {white: '', black: ''};
-    this.moveArray = [];
+    this.initGameState();
+    this.gameState.moveArray = [];
     this.currentGame().headers.forEach((header) => {
       if(header.name === "White"){
         players.white = header.value;
@@ -74,17 +98,9 @@ export class DebutTrainingComponent implements OnInit {
       move_info.move=move;
       const new_move: Move = this.constructMove(move_info);
       new_move.id=this.makeId(new_move);
-      this.moveArray.push(new_move);
+      this.gameState.moveArray.push(new_move);
     });
     this.gameResult = this.currentGame().result;
-    this.gameState = {
-      halfMoveNumber: 0,
-      currentBranch: [],
-      currentBranchStartHalfMoveNumber: 0,
-      movesUndone: [],
-      branchHistory: [],
-      lastMove: this.moveArray[0]
-    }
   }
 
   makeId(move: Move): string{
@@ -100,6 +116,7 @@ export class DebutTrainingComponent implements OnInit {
     const new_move: Move = { move: move.move, color: move_info.color, move_number: move_info.move_number, branch: [], branch_history: move_info.branch_history, halfMoveNumber: move_info.halfMoveNumber, isBranchStart: move_info.isBranchStart };
     if (move.ravs) {
       for (let i = 0; i < move.ravs.length; i++) {
+        new_move.branch.push([]);
         const branch_history = JSON.parse(JSON.stringify(new_move.branch_history));
         branch_history.push({halfMoveNumber: move_info.halfMoveNumber, rav: i});
         const branch_move_info: MoveInfo = { move_number: move_info.move_number, color: move_info.color, halfMoveNumber: move_info.halfMoveNumber, branch_history: branch_history, isBranchStart: false };
@@ -111,7 +128,7 @@ export class DebutTrainingComponent implements OnInit {
           isBranchStart = false;
           const new_branch_move = this.constructMove(branch_move_info);
           new_branch_move.id = this.makeId(new_branch_move);
-          new_move.branch.push(new_branch_move);
+          new_move.branch[i].push(new_branch_move);
         });
       }
     }
@@ -127,7 +144,9 @@ export class DebutTrainingComponent implements OnInit {
     if(this.currentGameNumber > 0){
       this.currentGameNumber--;
       this.gameToMoveArray();
-      this.debutBoardService.restart(this.gameState);
+      const fen = this.debutBoardService.restart(this.gameState);
+      this.board.position(fen);
+      this.highlight = '';
     }
   }
 
@@ -139,14 +158,11 @@ export class DebutTrainingComponent implements OnInit {
     if(this.currentGameNumber < this.parsedGames.length - 1){
       this.currentGameNumber++;
       this.gameToMoveArray();
-      this.debutBoardService.restart(this.gameState);
+      const fen = this.debutBoardService.restart(this.gameState);
+      this.board.position(fen);
+      this.highlight = '';
     }
   }
 
-  goToMove($event, move: Move): void{
-    $event.stopPropagation();
-    this.highlight = move.id;
-    this.gameState.lastMove = move;
-    this.debutBoardService.goToMove(move, this.currentGame(),this.gameState);
-  }
+
 }

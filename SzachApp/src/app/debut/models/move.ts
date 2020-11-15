@@ -8,6 +8,5 @@ export class Move {
   branch_history: BranchHistory[];
   halfMoveNumber: number;
   isBranchStart?: boolean;
-  ravs?: any[] = [];
   id?: string;
 }
