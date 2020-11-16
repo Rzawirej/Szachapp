@@ -1,4 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import pgnParser from 'pgn-parser';
 import { GameState } from '../../models/game-state';
 import { Move } from '../../models/move';
@@ -12,17 +13,34 @@ declare var ChessBoard: any;
 @Component({
   selector: 'app-debut-training',
   templateUrl: './debut-training.component.html',
-  providers: [DebutBoardService]
+  providers: [DebutBoardService],
+  styleUrls: ['./debut-training.component.css']
 })
 export class DebutTrainingComponent implements OnInit {
 
-  constructor(private debutBoardService: DebutBoardService){
+  board: any;
+  checkoutForm;
+  currentGameNumber = 0;
+  playersString = '';
+  gameResult = '';
+  highlight = '';
+  parsedGames: ParsedGame[] = [];
+  gameState: GameState;
+  fileLoaded = false;
+  fileError = false;
 
+  constructor(private debutBoardService: DebutBoardService, private formBuilder: FormBuilder) {
+    this.checkoutForm = this.formBuilder.group({
+      name: '',
+    });
   }
 
   @HostListener('window:resize', ['$event'])
   onResize() {
-    this.board.resize();
+    if(this.board){
+      this.board.resize();
+    }
+
   }
 
   @HostListener('window:keyup', ['$event'])
@@ -35,20 +53,7 @@ export class DebutTrainingComponent implements OnInit {
     }
   }
 
-  board: any;
-  currentGameNumber = 0;
-  playersString = '';
-  gameResult = '';
-  highlight = '';
-  parsedGames: ParsedGame[] = [];
-  gameState: GameState;
   ngOnInit(): void {
-    const config = {
-      draggable: false,
-      position: 'start',
-    }
-    this.board = ChessBoard('board1', config)
-    this.board.resize();
     this.initGameState();
   }
 
@@ -61,13 +66,33 @@ export class DebutTrainingComponent implements OnInit {
     }
   }
 
+  private initChessboard(){
+    const config = {
+      draggable: false,
+      position: 'start',
+    }
+    this.board = ChessBoard('debut-board', config)
+  }
+
   handleFileInput(files: FileList): void {
     let fileReader = new FileReader();
     fileReader.onload = () => {
+      this.fileError = true;
       this.parsedGames = pgnParser.parse(fileReader.result);
+      this.fileError = false;
       this.gameToMoveArray();
+      this.fileLoaded = true;
+      setTimeout(() => this.initChessboard(),0);
     }
     fileReader.readAsText(files[0]);
+  }
+
+  saveDebut(){
+    if (this.checkoutForm.value.name !== ''){
+      //zapisz w bazie te dane
+      console.log(this.checkoutForm.value.name);
+      console.log(this.gameState.moveArray);
+    }
   }
 
   prevMove(): void{
@@ -87,6 +112,7 @@ export class DebutTrainingComponent implements OnInit {
 
     const [highlightId, fen] = this.debutBoardService.goToMove(move, this.gameState);
     this.highlight = highlightId;
+    console.log(fen);
     this.board.position(fen);
   }
 
