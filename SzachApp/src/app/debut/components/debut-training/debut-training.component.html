@@ -1,18 +1,15 @@
 <div style="display: flex; flex-direction: row;">
+
   <div style="width: 60%;" >
     <div style="width: 40%;">
-      <div id="board1" style="width: 300px">
-      </div>
+      <div id="board1" style="width: 300px"></div>
       <button mat-icon-button (click)="prevMove()">
         <mat-icon>navigate_before</mat-icon>
       </button>
       <button mat-icon-button (click)="nextMove()">
         <mat-icon>navigate_next</mat-icon>
       </button>
-
-
       <div class="form-group">
-
         <label for="file">Choose File</label>
         <input type="file" id="file" (change)="handleFileInput($event.target.files)">
       </div>
@@ -24,7 +21,7 @@
       {{playersString}}
       <br>
       <span *ngFor="let move of gameState.moveArray; let first = first;" (click)="goToMove($event, move)" style="cursor: pointer;">
-        <ng-container *ngTemplateOutlet="moveTemplate; context:{ move: move, first: first}"></ng-container>
+        <ng-container *ngTemplateOutlet="moveTemplate; context:{move: move, first: first}"></ng-container>
       </span>
       <ng-template #moveTemplate let-move="move" let-first="first" let-uniqeCode="uniqeCode">
         <span *ngIf="move.color === 'white'">{{move.move_number+' '}}</span>
@@ -33,18 +30,19 @@
         <span *ngFor="let branch of move.branch;">
           <span *ngFor="let branchMove of branch; let last = last;" (click)="goToMove($event, branchMove)" style="cursor: pointer;">
             <span *ngIf="branchMove.isBranchStart">(</span>
-            <ng-container *ngTemplateOutlet="moveTemplate; context:{ move: branchMove, first: branchMove.isBranchStart}"></ng-container>
+            <ng-container *ngTemplateOutlet="moveTemplate; context:{move: branchMove, first: branchMove.isBranchStart}"></ng-container>
             <span *ngIf="last">)&nbsp;</span>
           </span>
         </span>
       </ng-template>
       {{gameResult}}
     </mat-card>
-    <button mat-icon-button (click)="prevGame()">
+    <button mat-icon-button (click)="goToPrevGame()">
       <mat-icon>navigate_before</mat-icon>
     </button>
-    <button mat-icon-button (click)="nextGame()">
+    <button mat-icon-button (click)="goToNextGame()">
       <mat-icon>navigate_next</mat-icon>
     </button>
   </div>
+
 </div>

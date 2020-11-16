@@ -21,8 +21,18 @@ export class DebutTrainingComponent implements OnInit {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  onResize() {
     this.board.resize();
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (event.key == 'ArrowRight') {
+      this.nextMove();
+    }
+    if (event.key == 'ArrowLeft') {
+      this.prevMove();
+    }
   }
 
   board: any;
@@ -42,7 +52,7 @@ export class DebutTrainingComponent implements OnInit {
     this.initGameState();
   }
 
-  initGameState(): void{
+  private initGameState(): void{
     this.gameState = {
       halfMoveNumber: 0,
       currentBranch: [],
@@ -80,11 +90,11 @@ export class DebutTrainingComponent implements OnInit {
     this.board.position(fen);
   }
 
-  gameToMoveArray(): void{
+  private gameToMoveArray(): void{
     const players = {white: '', black: ''};
     this.initGameState();
     this.gameState.moveArray = [];
-    this.currentGame().headers.forEach((header) => {
+    this.getCurrentGame().headers.forEach((header) => {
       if(header.name === "White"){
         players.white = header.value;
       }
@@ -94,16 +104,16 @@ export class DebutTrainingComponent implements OnInit {
     })
     this.playersString = `${players.white} vs ${players.black}\n`
     const move_info: MoveInfo = {move_number: 1, move: undefined, color: 'white', halfMoveNumber: 1, branch_history: []};
-    this.currentGame().moves.forEach((move: ParsedMove) => {
+    this.getCurrentGame().moves.forEach((move: ParsedMove) => {
       move_info.move=move;
       const new_move: Move = this.constructMove(move_info);
       new_move.id=this.makeId(new_move);
       this.gameState.moveArray.push(new_move);
     });
-    this.gameResult = this.currentGame().result;
+    this.gameResult = this.getCurrentGame().result;
   }
 
-  makeId(move: Move): string{
+  private makeId(move: Move): string{
     let id: string = move.halfMoveNumber+'.';
     move.branch_history.forEach((historyObject) => {
       id+=historyObject.halfMoveNumber+'.'+historyObject.rav+'.';
@@ -111,7 +121,7 @@ export class DebutTrainingComponent implements OnInit {
     return id;
   }
 
-  constructMove(move_info: MoveInfo): Move{
+  private constructMove(move_info: MoveInfo): Move{
     const move = move_info.move;
     const new_move: Move = { move: move.move, color: move_info.color, move_number: move_info.move_number, branch: [], branch_history: move_info.branch_history, halfMoveNumber: move_info.halfMoveNumber, isBranchStart: move_info.isBranchStart };
     if (move.ravs) {
@@ -140,7 +150,7 @@ export class DebutTrainingComponent implements OnInit {
     return new_move;
   }
 
-  prevGame(): void{
+  goToPrevGame(): void{
     if(this.currentGameNumber > 0){
       this.currentGameNumber--;
       this.gameToMoveArray();
@@ -150,11 +160,7 @@ export class DebutTrainingComponent implements OnInit {
     }
   }
 
-  currentGame(): ParsedGame {
-    return this.parsedGames ? this.parsedGames[this.currentGameNumber] : null;
-  }
-
-  nextGame(): void{
+  goToNextGame(): void{
     if(this.currentGameNumber < this.parsedGames.length - 1){
       this.currentGameNumber++;
       this.gameToMoveArray();
@@ -164,5 +170,8 @@ export class DebutTrainingComponent implements OnInit {
     }
   }
 
+  private getCurrentGame(): ParsedGame {
+    return this.parsedGames ? this.parsedGames[this.currentGameNumber] : null;
+  }
 
 }
