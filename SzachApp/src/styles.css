@@ -11,3 +11,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   flex-direction: row;
   justify-content: space-around;
 }
+.center{
+  display: flex;
+  justify-content: center;
+}
+.header{
+  padding-top: 15px;
+  text-align: center;
+  font-size: 30px;
+}

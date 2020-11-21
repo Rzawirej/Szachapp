@@ -1,12 +1,13 @@
-<h1 class="header">Ogłoszenia</h1>
+<h1 class="header">Twoje debiuty</h1>
 <mat-list style="padding: 20px;">
-  <mat-list-item *ngFor="let news of newsList; let index=index">
+  <mat-list-item  *ngFor="let debut of debuts; let index=index" >
     <mat-icon matListIcon color="accent">{{index<2?"error":'check'}}</mat-icon>
+
     <h4 matLine>
-      Nazwa: {{news.name}}
+      Nazwa: {{debut.name}}
     </h4>
     <h4 matLine>
-      Treść: {{news.text}}
+      Ruchy: {{debut.firstMoves}}
     </h4>
     <button mat-raised-button color="accent" [matMenuTriggerFor]="menu">
       Akcje
@@ -29,6 +30,6 @@
   </button>
 </div>
 
-<button mat-fab class="fab" color="accent" (click)="openDialog()">
+<button mat-fab class="fab" color="accent" routerLink="/new-debut">
   <mat-icon>add</mat-icon>
 </button>

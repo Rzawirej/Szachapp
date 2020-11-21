@@ -1,39 +1,45 @@
-<div class="flex-row">
-
+<h1 class="header">Dodaj debiut</h1>
+<div style="padding: 10px;">
+  <mat-form-field style="width: 100%;" appearance="outline">
+    <mat-label>Wybierz plik</mat-label>
+    <ngx-mat-file-input (change)="handleFileInput($event.target.files)"></ngx-mat-file-input>
+    <mat-icon matSuffix>folder</mat-icon>
+  </mat-form-field>
+  <mat-error *ngIf="fileError">Nie udało się przetworzyć pliku, przepraszamy.</mat-error>
+</div>
+<div *ngIf="fileLoaded" class="flex-row" style="padding: 20px;">
   <div>
-    <div *ngIf="fileLoaded" >
-      <div id="debut-board" ></div>
-      <button mat-icon-button (click)="prevMove()">
-        <mat-icon>navigate_before</mat-icon>
-      </button>
-      <button mat-icon-button (click)="nextMove()">
-        <mat-icon>navigate_next</mat-icon>
-      </button>
-    </div>
     <div>
-      <mat-form-field appearance="outline">
-        <mat-label>Wybierz plik</mat-label>
-        <ngx-mat-file-input (change)="handleFileInput($event.target.files)"></ngx-mat-file-input>
-        <mat-icon matSuffix>folder</mat-icon>
+      <div id="debut-board" ></div>
+      <div class="center">
+        <button mat-flat-button color="accent" (click)="prevMove()">
+          <mat-icon>navigate_before</mat-icon>
+        </button>
+        <button mat-flat-button color="accent" (click)="nextMove()">
+          <mat-icon>navigate_next</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <form [formGroup]="checkoutForm" class="flex-column">
+      <mat-form-field>
+        <input matInput required placeholder="Nazwa" formControlName="name">
+        <mat-error>Wpisz cos</mat-error>
       </mat-form-field>
-      <mat-error *ngIf="fileError">Nie udało się przetworzyć pliku, przepraszamy.</mat-error>
-      <form *ngIf="fileLoaded" [formGroup]="checkoutForm" class="flex-column">
-        <mat-form-field>
-          <input matInput required placeholder="Nazwa" formControlName="name">
-          <mat-error>Wpisz cos</mat-error>
-        </mat-form-field>
-      <button mat-flat-button color='primary' (click)="saveDebut()">
+      <button mat-flat-button color='accent' (click)="saveDebut()">
         <span>Zapisz debiut</span>
       </button>
-      </form>
-    </div>
+    </form>
 
   </div>
 
-  <div style="width: 30%;">
+  <div class="moves-section">
+
+
     <mat-card>
-      {{playersString}}
-      <br>
+      <div class="center">
+        {{playersString}}
+      </div>
       <span *ngFor="let move of gameState.moveArray; let first = first;" (click)="goToMove($event, move)" style="cursor: pointer;">
         <ng-container *ngTemplateOutlet="moveTemplate; context:{move: move, first: first}"></ng-container>
       </span>
@@ -51,12 +57,15 @@
       </ng-template>
       {{gameResult}}
     </mat-card>
-    <button mat-icon-button (click)="goToPrevGame()">
-      <mat-icon>navigate_before</mat-icon>
-    </button>
-    <button mat-icon-button (click)="goToNextGame()">
-      <mat-icon>navigate_next</mat-icon>
-    </button>
+    <div class="center">
+      <button mat-flat-button color="accent" (click)="goToPrevGame()">
+        <mat-icon>navigate_before</mat-icon>
+      </button>
+      <button mat-flat-button color="accent" (click)="goToNextGame()">
+        <mat-icon>navigate_next</mat-icon>
+      </button>
+    </div>
+
   </div>
 
 </div>
