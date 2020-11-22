@@ -13,6 +13,7 @@ import { CoachNewsComponent } from './news/components/coach-news/coach-news.comp
 import { PlayerNewsComponent } from './news/components/player-news/player-news.component';
 import { DebutListComponent } from './debut/components/debut-list/debut-list.component';
 import { PuzzleListComponent } from './puzzle/component/puzzle-list/puzzle-list.component';
+import { GroupListComponent } from './group/components/group-list/group-list.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { PuzzleListComponent } from './puzzle/component/puzzle-list/puzzle-list.
     PlayerNewsComponent,
     DebutListComponent,
     PuzzleListComponent,
+    GroupListComponent,
   ],
   imports: [
     BrowserModule,

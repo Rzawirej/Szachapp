@@ -20,3 +20,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   text-align: center;
   font-size: 30px;
 }
+.example-spacer{
+  flex: 1 1 auto;
+}

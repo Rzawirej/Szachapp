@@ -1,17 +1,11 @@
-<h1 class="header">Twoje debiuty</h1>
-<mat-form-field style="width: 96%; margin: 0px 20px;">
-  <input matInput placeholder="Wyszukaj...">
-  <mat-icon matSuffix>search</mat-icon>
-</mat-form-field>
-<mat-list style="padding: 20px;">
-  <mat-list-item  *ngFor="let debut of debuts; let index=index" >
-    <mat-icon matListIcon color="accent">{{index<2?"error":'check'}}</mat-icon>
-
+<h1 class="header">Twoje grupy</h1>
+<mat-nav-list style="padding: 20px;">
+  <mat-list-item *ngFor="let group of groups;">
     <h4 matLine>
-      Nazwa: {{debut.name}}
+      Nazwa: {{group.name}}
     </h4>
     <h4 matLine>
-      Ruchy: {{debut.firstMoves}}
+      Kod grupy: {{group.code}}
     </h4>
     <button mat-raised-button color="accent" [matMenuTriggerFor]="menu">
       Akcje
@@ -19,9 +13,11 @@
     <mat-divider></mat-divider>
   </mat-list-item>
 
-</mat-list>
+</mat-nav-list>
 <mat-menu #menu="matMenu">
-  <button mat-menu-item>Przypisz do grup</button>
+  <button mat-menu-item>Przypisz debiuty</button>
+  <button mat-menu-item>Przypisz zadania</button>
+  <button mat-menu-item>Uczestnicy</button>
   <button mat-menu-item>Zmień nazwę</button>
   <button mat-menu-item>Usuń</button>
 </mat-menu>
@@ -35,6 +31,6 @@
   </button>
 </div>
 
-<button mat-fab class="fab" color="accent" routerLink="/new-debut">
+<button mat-fab class="fab" color="accent">
   <mat-icon>add</mat-icon>
 </button>

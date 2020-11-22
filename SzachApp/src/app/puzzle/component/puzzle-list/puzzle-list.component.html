@@ -1,13 +1,16 @@
 <h1 class="header">Twoje paczki zadań</h1>
+<mat-form-field style="width: 96%; margin: 0px 20px;">
+  <input matInput placeholder="Wyszukaj...">
+  <mat-icon matSuffix>search</mat-icon>
+</mat-form-field>
 <mat-list style="padding: 20px;">
   <mat-list-item *ngFor="let puzzle of puzzles; let index=index">
     <mat-icon matListIcon color="accent">{{index<2?"error":'check'}}</mat-icon>
-
     <h4 matLine>
       Nazwa: {{puzzle.name}}
     </h4>
     <h4 matLine>
-      Ruchy: {{puzzle.quantity}}
+      Ilość zadań: {{puzzle.quantity}}
     </h4>
     <button mat-raised-button color="accent" [matMenuTriggerFor]="menu">
       Akcje
@@ -22,10 +25,11 @@
   <button mat-menu-item>Usuń</button>
 </mat-menu>
 <div class="center">
-  <button mat-icon-button>
+  <button mat-flat-button color="accent">
     <mat-icon>navigate_before</mat-icon>
   </button>
-  <button mat-icon-button>
+  &nbsp;
+  <button mat-flat-button color="accent">
     <mat-icon>navigate_next</mat-icon>
   </button>
 </div>
