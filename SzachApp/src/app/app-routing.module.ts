@@ -4,6 +4,7 @@ import { DebutListComponent } from './debut/components/debut-list/debut-list.com
 import { DebutTrainingComponent } from './debut/components/debut-training/debut-training.component';
 import { GroupListComponent } from './group/components/group-list/group-list.component';
 import { CoachNewsComponent } from './news/components/coach-news/coach-news.component';
+import { AddPuzzleComponent } from './puzzle/component/add-puzzle/add-puzzle.component';
 import { PuzzleListComponent } from './puzzle/component/puzzle-list/puzzle-list.component';
 
 
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'new-debut', component: DebutTrainingComponent },
   { path: 'news', component: CoachNewsComponent },
   { path: 'puzzles', component: PuzzleListComponent },
+  { path: 'new-puzzles', component: AddPuzzleComponent},
   { path: '', component: GroupListComponent },
 ];
 

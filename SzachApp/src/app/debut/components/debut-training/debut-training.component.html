@@ -25,7 +25,7 @@
     <form [formGroup]="checkoutForm" class="flex-column">
       <mat-form-field>
         <input matInput required placeholder="Nazwa" formControlName="name">
-        <mat-error>Wpisz cos</mat-error>
+        <mat-error>Podaj nazwę debiutu</mat-error>
       </mat-form-field>
       <button mat-flat-button color='accent' (click)="saveDebut()">
         <span>Zapisz debiut</span>
@@ -35,8 +35,6 @@
   </div>
 
   <div class="moves-section">
-
-
     <mat-card>
       <div class="center">
         {{playersString}}

@@ -14,6 +14,7 @@ import { PlayerNewsComponent } from './news/components/player-news/player-news.c
 import { DebutListComponent } from './debut/components/debut-list/debut-list.component';
 import { PuzzleListComponent } from './puzzle/component/puzzle-list/puzzle-list.component';
 import { GroupListComponent } from './group/components/group-list/group-list.component';
+import { AddPuzzleComponent, EndPuzzlesDialog, NamePuzzlesDialog } from './puzzle/component/add-puzzle/add-puzzle.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,9 @@ import { GroupListComponent } from './group/components/group-list/group-list.com
     DebutListComponent,
     PuzzleListComponent,
     GroupListComponent,
+    AddPuzzleComponent,
+    EndPuzzlesDialog,
+    NamePuzzlesDialog,
   ],
   imports: [
     BrowserModule,

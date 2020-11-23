@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>Podaj nazwę paczki zadań.</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Nazwa</mat-label>
+    <input matInput [(ngModel)]="name">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-flat-button [mat-dialog-close]="name" color="accent">Potwierdź</button>
+</div>

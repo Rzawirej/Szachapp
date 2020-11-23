@@ -1,0 +1,49 @@
+<span *ngIf="isPositionVisible; else answerView">
+  <h1 class="header">Ustaw pozycję</h1>
+  <div class="center">
+    <span class="flex-column center" style="padding: 20px;">
+      <button mat-flat-button color='accent' (click)="flipBoard()">
+        <span>Odwróć szachownicę</span>
+      </button>
+    </span>
+    <div id="position-board" style="width: 30%;"></div>
+    <span class="flex-column center" style="padding: 20px;">
+      <button mat-flat-button color='accent' (click)="goToAnswer()">
+        <span>Podaj rozwiązanie</span>
+      </button>
+      <mat-error *ngIf="!isLegal">Niepoprawna pozycja</mat-error>
+    </span>
+  </div>
+</span>
+
+<ng-template #answerView>
+<h1 class="header">Podaj rozwiązanie</h1>
+<div class="flex-row" style="padding: 20px;">
+  <div>
+    <div id="answer-board" style="width:400px"></div>
+  </div>
+
+  <div class="moves-section">
+    <mat-card style="width: 600px;">
+      <span *ngFor="let move of moves; let index = index;">
+        <span *ngIf="index%2 === 0">{{index/2+1+' '}}</span>
+        <span>{{move+' '}}</span>
+      </span>
+    </mat-card>
+    <div class="center">
+      <button mat-flat-button color="accent" (click)="prevMove()">
+        <span>Cofnij ruch</span>
+      </button>
+      <button mat-flat-button color="accent" (click)="returnToPosition()">
+        <span>Wróć do ustawiania</span>
+      </button>
+      <button mat-flat-button color="accent" (click)="nextPuzzle()">
+        <span>Zapisz zadanie</span>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+</ng-template>
+
