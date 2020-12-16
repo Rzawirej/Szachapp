@@ -29,9 +29,6 @@ export class CoachNewsComponent implements OnInit {
 export class NewNewsDialog {
   constructor(
     public dialogRef: MatDialogRef<CoachNewsComponent>) { }
-
-  animal = {};
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
+  name = '';
+  text = '';
 }

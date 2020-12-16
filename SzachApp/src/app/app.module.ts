@@ -9,7 +9,7 @@ import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ToolbarComponent } from './toolbar/toolbar.component';
-import { CoachNewsComponent } from './news/components/coach-news/coach-news.component';
+import { CoachNewsComponent, NewNewsDialog } from './news/components/coach-news/coach-news.component';
 import { PlayerNewsComponent } from './news/components/player-news/player-news.component';
 import { DebutListComponent } from './debut/components/debut-list/debut-list.component';
 import { PuzzleListComponent } from './puzzle/component/puzzle-list/puzzle-list.component';
@@ -29,6 +29,7 @@ import { AddPuzzleComponent, EndPuzzlesDialog, NamePuzzlesDialog } from './puzzl
     AddPuzzleComponent,
     EndPuzzlesDialog,
     NamePuzzlesDialog,
+    NewNewsDialog,
   ],
   imports: [
     BrowserModule,
