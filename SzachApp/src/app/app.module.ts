@@ -15,6 +15,8 @@ import { DebutListComponent } from './debut/components/debut-list/debut-list.com
 import { PuzzleListComponent } from './puzzle/component/puzzle-list/puzzle-list.component';
 import { GroupListComponent } from './group/components/group-list/group-list.component';
 import { AddPuzzleComponent, EndPuzzlesDialog, NamePuzzlesDialog } from './puzzle/component/add-puzzle/add-puzzle.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './auth/token.interceptor';
 
 @NgModule({
   declarations: [
@@ -36,10 +38,15 @@ import { AddPuzzleComponent, EndPuzzlesDialog, NamePuzzlesDialog } from './puzzl
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,12 +1,15 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 import pgnParser from 'pgn-parser';
+import { Debut } from '../../models/debut';
 import { GameState } from '../../models/game-state';
 import { Move } from '../../models/move';
 import { MoveInfo } from '../../models/move-info';
 import { ParsedGame } from '../../models/parsed-game';
 import { ParsedMove } from '../../models/parsed-move';
 import { DebutBoardService } from '../../services/debut-board.service';
+import { DebutCoachHttpService } from '../../services/debut-coach-http.service';
 declare var ChessBoard: any;
 
 
@@ -29,7 +32,12 @@ export class DebutTrainingComponent implements OnInit {
   fileLoaded = false;
   fileError = false;
 
-  constructor(private debutBoardService: DebutBoardService, private formBuilder: FormBuilder) {
+  constructor(
+    private debutBoardService: DebutBoardService,
+    private formBuilder: FormBuilder,
+    private debutCoachHttpService: DebutCoachHttpService,
+    private router: Router
+    ) {
     this.checkoutForm = this.formBuilder.group({
       name: '',
     });
@@ -89,9 +97,11 @@ export class DebutTrainingComponent implements OnInit {
 
   saveDebut(){
     if (this.checkoutForm.value.name !== ''){
-      //zapisz w bazie te dane
-      console.log(this.checkoutForm.value.name);
-      console.log(this.gameState.moveArray);
+      const debut: Debut = {name:this.checkoutForm.value.name, color: 'w', pgn: this.gameState.moveArray};
+      console.log(debut);
+      this.debutCoachHttpService.saveDebut(debut).subscribe((data)=>{
+        this.router.navigate(['debut']);
+      });
     }
   }
 

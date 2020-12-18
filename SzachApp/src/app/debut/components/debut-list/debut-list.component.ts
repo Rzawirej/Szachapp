@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DebutCoachHttpService } from '../../services/debut-coach-http.service';
 
 @Component({
   selector: 'app-debut-list',
@@ -7,13 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DebutListComponent implements OnInit {
 
-  debuts = [{name: 'francuska', firstMoves: '1.e4 e6 2. d4 d5 3. Bd3 dxe4 4. Bxe4 Nf6 5.Bf3 c6'},
-    { name: 'francuska', firstMoves: '1.e4 e6 2. d4 d5 3. Bd3 dxe4 4. Bxe4 Nf6 5.Bf3 c6' },
-    { name: 'francuska', firstMoves: '1.e4 e6 2. d4 d5 3. Bd3 dxe4 4. Bxe4 Nf6 5.Bf3 c6' },
-    { name: 'francuska', firstMoves: '1.e4 e6 2. d4 d5 3. Bd3 dxe4 4. Bxe4 Nf6 5.Bf3 c6' }]
-  constructor() { }
+  debuts = [];
+  constructor(private debutCoachHttpService: DebutCoachHttpService) { }
 
   ngOnInit(): void {
+    this.debutCoachHttpService.getDebuts().subscribe((debuts) => this.debuts = debuts);
   }
 
 }
