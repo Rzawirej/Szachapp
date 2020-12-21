@@ -13,7 +13,7 @@ import { CoachNewsComponent, NewNewsDialog } from './news/components/coach-news/
 import { PlayerNewsComponent } from './news/components/player-news/player-news.component';
 import { DebutListComponent } from './debut/components/debut-list/debut-list.component';
 import { PuzzleListComponent } from './puzzle/component/puzzle-list/puzzle-list.component';
-import { GroupListComponent } from './group/components/group-list/group-list.component';
+import { EditGroupDialog, GroupListComponent, NewGroupDialog } from './group/components/group-list/group-list.component';
 import { AddPuzzleComponent, EndPuzzlesDialog, NamePuzzlesDialog } from './puzzle/component/add-puzzle/add-puzzle.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth/token.interceptor';
@@ -32,6 +32,8 @@ import { AuthInterceptor } from './auth/token.interceptor';
     EndPuzzlesDialog,
     NamePuzzlesDialog,
     NewNewsDialog,
+    NewGroupDialog,
+    EditGroupDialog
   ],
   imports: [
     BrowserModule,

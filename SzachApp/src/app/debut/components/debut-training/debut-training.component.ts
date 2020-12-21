@@ -98,7 +98,6 @@ export class DebutTrainingComponent implements OnInit {
   saveDebut(){
     if (this.checkoutForm.value.name !== ''){
       const debut: Debut = {name:this.checkoutForm.value.name, color: 'w', pgn: this.gameState.moveArray};
-      console.log(debut);
       this.debutCoachHttpService.saveDebut(debut).subscribe((data)=>{
         this.router.navigate(['debut']);
       });

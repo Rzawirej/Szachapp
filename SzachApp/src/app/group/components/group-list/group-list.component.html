@@ -7,20 +7,24 @@
     <h4 matLine>
       Kod grupy: {{group.code}}
     </h4>
-    <button mat-raised-button color="accent" [matMenuTriggerFor]="menu">
+    <button mat-raised-button color="accent" [matMenuTriggerFor]="menu" [matMenuTriggerData]="group.name">
       Akcje
     </button>
     <mat-divider></mat-divider>
+    <mat-menu #menu="matMenu">
+      <ng-template matMenuContent let-items="menuItems">
+        <button mat-menu-item>Przypisz debiuty</button>
+        <button mat-menu-item>Przypisz zadania</button>
+        <button mat-menu-item>Uczestnicy</button>
+        <button mat-menu-item (click)="openEditDialog(group._id)">Zmień nazwę</button>
+        <button mat-menu-item (click)="deleteGroup(group._id)">Usuń</button>
+      </ng-template>
+
+    </mat-menu>
   </mat-list-item>
 
 </mat-nav-list>
-<mat-menu #menu="matMenu">
-  <button mat-menu-item>Przypisz debiuty</button>
-  <button mat-menu-item>Przypisz zadania</button>
-  <button mat-menu-item>Uczestnicy</button>
-  <button mat-menu-item>Zmień nazwę</button>
-  <button mat-menu-item>Usuń</button>
-</mat-menu>
+
 <div class="center">
   <button mat-flat-button color="accent">
     <mat-icon>navigate_before</mat-icon>
@@ -31,6 +35,6 @@
   </button>
 </div>
 
-<button mat-fab class="fab" color="accent">
+<button mat-fab class="fab" color="accent" (click)="openNewDialog()">
   <mat-icon>add</mat-icon>
 </button>
