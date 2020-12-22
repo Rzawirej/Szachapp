@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { NewsCoachHttpService } from '../../services/news-coach-http.service';
 
 @Component({
   selector: 'app-coach-news',
@@ -8,17 +9,24 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 })
 export class CoachNewsComponent implements OnInit {
 
-  newsList = [{ name: 'Odwołane', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna mi, volutpat et convallis vulputate, sodales nec arcu. Donec ac tellus sodales, mattis dui a, pellentesque odio. Mauris eu odio a odio rutrum sagittis. Etiam non purus lectus. Pellentesque nec neque est. Praesent non lorem et arcu tempor efficitur vitae sit amet massa. Integer vulputate quis tortor ac sollicitudin. Nunc lectus nibh, varius non tellus ac, egestas rutrum tortor. Donec commodo dolor vel euismod aliquam. Integer ac dui auctor, auctor justo a, tempus ante. Vivamus gravida eget sem malesuada pharetra. Suspendisse at mi fermentum, ultricies lorem eu, tristique neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer pharetra rhoncus dapibus. ' },
-    { name: 'Turniej', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna mi, volutpat et convallis vulputate, sodales nec arcu. Donec ac tellus sodales, mattis dui a, pellentesque odio. Mauris eu odio a odio rutrum sagittis. Etiam non purus lectus. Pellentesque nec neque est. Praesent non lorem et arcu tempor efficitur vitae sit amet massa. Integer vulputate quis tortor ac sollicitudin. Nunc lectus nibh, varius non tellus ac, egestas rutrum tortor. Donec commodo dolor vel euismod aliquam. Integer ac dui auctor, auctor justo a, tempus ante. Vivamus gravida eget sem malesuada pharetra. Suspendisse at mi fermentum, ultricies lorem eu, tristique neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer pharetra rhoncus dapibus. ' },
-    { name: 'Inna sala', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna mi, volutpat et convallis vulputate, sodales nec arcu. Donec ac tellus sodales, mattis dui a, pellentesque odio. Mauris eu odio a odio rutrum sagittis. Etiam non purus lectus. Pellentesque nec neque est. Praesent non lorem et arcu tempor efficitur vitae sit amet massa. Integer vulputate quis tortor ac sollicitudin. Nunc lectus nibh, varius non tellus ac, egestas rutrum tortor. Donec commodo dolor vel euismod aliquam. Integer ac dui auctor, auctor justo a, tempus ante. Vivamus gravida eget sem malesuada pharetra. Suspendisse at mi fermentum, ultricies lorem eu, tristique neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer pharetra rhoncus dapibus. ' },
-    { name: 'Przypomnienie', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna mi, volutpat et convallis vulputate, sodales nec arcu. Donec ac tellus sodales, mattis dui a, pellentesque odio. Mauris eu odio a odio rutrum sagittis. Etiam non purus lectus. Pellentesque nec neque est. Praesent non lorem et arcu tempor efficitur vitae sit amet massa. Integer vulputate quis tortor ac sollicitudin. Nunc lectus nibh, varius non tellus ac, egestas rutrum tortor. Donec commodo dolor vel euismod aliquam. Integer ac dui auctor, auctor justo a, tempus ante. Vivamus gravida eget sem malesuada pharetra. Suspendisse at mi fermentum, ultricies lorem eu, tristique neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer pharetra rhoncus dapibus. ' }]
-  constructor(public dialog: MatDialog) { }
+  newsList = []
+  constructor(
+    public dialog: MatDialog,
+    private newsCoachHttpServive: NewsCoachHttpService) { }
 
   ngOnInit(): void {
+    this.newsCoachHttpServive.getCoachNews().subscribe((news) => this.newsList = news);
   }
 
   openDialog() {
-    this.dialog.open(NewNewsDialog);
+    const dialogRef = this.dialog.open(NewNewsDialog);
+    dialogRef.afterClosed().subscribe(result => {
+      this.newsCoachHttpServive.addNews(result.name, result.text).subscribe((news) => this.newsList.push(news));
+    });
+  }
+
+  deleteNews(id: string) {
+    this.newsCoachHttpServive.deleteNews(id).subscribe((news) => this.newsList = this.newsList.filter((value) => news._id !== value._id));
   }
 }
 

@@ -7,10 +7,10 @@
   </mat-form-field>
   <mat-form-field>
     <mat-label>Treść</mat-label>
-    <textarea matInput></textarea>
+    <textarea matInput [(ngModel)]="text"></textarea>
   </mat-form-field>
   </div>
 </div>
 <div mat-dialog-actions>
-  <button mat-flat-button [mat-dialog-close]="name" color="accent">Potwierdź</button>
+  <button mat-flat-button [mat-dialog-close]="{name: name, text: text}" color="accent">Potwierdź</button>
 </div>
