@@ -2,6 +2,8 @@ import { Component, HostListener, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import Chess from "chess.js";
+import { Puzzle } from '../../models/puzzle.model';
+import { PuzzleCoachHttpService } from '../../services/puzzle-coach-http.service';
 declare var ChessBoard: any;
 
 @Component({
@@ -16,8 +18,8 @@ export class AddPuzzleComponent implements OnInit {
   answerBoard: any;
   isLegal = true;
   isPositionVisible = true;
-  moves = [];
-  puzzles = [];
+  moves: string[] = [];
+  puzzles: Puzzle[] = [];
   startingFen = '';
   whiteOrientation = true;
   @HostListener('window:resize', ['$event'])
@@ -28,7 +30,7 @@ export class AddPuzzleComponent implements OnInit {
 
   }
 
-  constructor(public dialog: MatDialog, private router: Router,) { }
+  constructor(public dialog: MatDialog, private router: Router, private puzzleCoachHttpService: PuzzleCoachHttpService) { }
 
   ngOnInit(): void {
     setTimeout(() => this.initPositionBoard(''), 0);
@@ -112,14 +114,15 @@ export class AddPuzzleComponent implements OnInit {
       const dialogRef = this.dialog.open(EndPuzzlesDialog);
       dialogRef.afterClosed().subscribe(end => {
         if(end !== undefined){
-          this.puzzles.push({position: this.startingFen, answer: this.moves})
+          this.puzzles.push({FEN: this.startingFen, answer: this.moves})
           if (end) {
-            console.log(this.puzzles);
             const dialogRef = this.dialog.open(NamePuzzlesDialog);
             dialogRef.afterClosed().subscribe(name => {
               if(name){
-                console.log(name)
-                this.router.navigateByUrl('/puzzles');
+                this.puzzleCoachHttpService.addPuzzlePackage(name,this.puzzles).subscribe(() => {
+                  this.router.navigateByUrl('/puzzles');
+                });
+
               }
             })
           } else {

@@ -10,20 +10,21 @@
       Nazwa: {{puzzle.name}}
     </h4>
     <h4 matLine>
-      Ilość zadań: {{puzzle.quantity}}
+      Ilość zadań: {{puzzle.puzzles.length}}
     </h4>
     <button mat-raised-button color="accent" [matMenuTriggerFor]="menu">
       Akcje
     </button>
     <mat-divider></mat-divider>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>Przypisz do grup</button>
+      <button mat-menu-item>Zmień nazwę</button>
+      <button mat-menu-item (click)="deletePuzzlePackage(puzzle._id)">Usuń</button>
+    </mat-menu>
   </mat-list-item>
 
 </mat-list>
-<mat-menu #menu="matMenu">
-  <button mat-menu-item>Przypisz do grup</button>
-  <button mat-menu-item>Zmień nazwę</button>
-  <button mat-menu-item>Usuń</button>
-</mat-menu>
+
 <div class="center">
   <button mat-flat-button color="accent">
     <mat-icon>navigate_before</mat-icon>

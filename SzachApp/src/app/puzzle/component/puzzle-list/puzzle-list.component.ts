@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PuzzleCoachHttpService } from '../../services/puzzle-coach-http.service';
 
 @Component({
   selector: 'app-puzzle-list',
@@ -7,14 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PuzzleListComponent implements OnInit {
 
-  puzzles = [{ name: 'Związania', quantity: 3 },
-    { name: 'Maty w 2', quantity: 12 },
-    { name: 'Końcówki', quantity: 5 },
-    { name: 'Maty', quantity: 4 }]
+  puzzles = []
 
-  constructor() { }
+  constructor(private puzzleCoachHttpService: PuzzleCoachHttpService) { }
 
   ngOnInit(): void {
+    this.puzzleCoachHttpService.getCoachPuzzlePackages().subscribe((puzzlePackages) => {
+      this.puzzles = puzzlePackages
+    });
+  }
+
+  deletePuzzlePackage(id: string) {
+    this.puzzleCoachHttpService.deletePuzzlePackage(id).subscribe((puzzlePackage) => this.puzzles = this.puzzles.filter((value) => puzzlePackage._id !== value._id));
   }
 
 }
