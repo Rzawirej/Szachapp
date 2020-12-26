@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { GroupCoachHttpService } from '../../services/group-coach-http.service';
 
 @Component({
@@ -13,7 +14,8 @@ export class GroupListComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
-    private groupCoachHttpService: GroupCoachHttpService
+    private groupCoachHttpService: GroupCoachHttpService,
+    private router: Router
     ) { }
 
   ngOnInit(): void {
@@ -28,6 +30,10 @@ export class GroupListComponent implements OnInit {
 
   }
 
+  goToParticipants(groupId: string): void{
+    this.router.navigate(['/participants/'+groupId]);
+  }
+
   openEditDialog(groupId: string): void {
     const dialogRef = this.dialog.open(EditGroupDialog);
     dialogRef.afterClosed().subscribe(result => {
@@ -39,7 +45,6 @@ export class GroupListComponent implements OnInit {
         }
       });
     });
-
   }
 
   deleteGroup(id: string){

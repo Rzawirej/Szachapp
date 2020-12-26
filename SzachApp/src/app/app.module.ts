@@ -17,6 +17,7 @@ import { EditGroupDialog, GroupListComponent, NewGroupDialog } from './group/com
 import { AddPuzzleComponent, EndPuzzlesDialog, NamePuzzlesDialog } from './puzzle/component/add-puzzle/add-puzzle.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth/token.interceptor';
+import { AddParticipantDialog, ParticipantsListComponent } from './group/components/group-participants/participants-list/participants-list.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,9 @@ import { AuthInterceptor } from './auth/token.interceptor';
     NamePuzzlesDialog,
     NewNewsDialog,
     NewGroupDialog,
-    EditGroupDialog
+    EditGroupDialog,
+    AddParticipantDialog,
+    ParticipantsListComponent
   ],
   imports: [
     BrowserModule,
