@@ -17,7 +17,7 @@
     </button>
     <mat-divider></mat-divider>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item>Przypisz do grup</button>
+      <button mat-menu-item (click)="goToAssign(puzzle._id, puzzle.name)">Przypisz do grup</button>
       <button mat-menu-item>Zmień nazwę</button>
       <button mat-menu-item (click)="deletePuzzlePackage(puzzle._id)">Usuń</button>
     </mat-menu>

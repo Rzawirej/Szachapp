@@ -1,5 +1,5 @@
 <h1 class="header">Twoje grupy</h1>
-<mat-nav-list style="padding: 20px;">
+<mat-list style="padding: 20px;">
   <mat-list-item *ngFor="let group of groups;">
     <h4 matLine>
       Nazwa: {{group.name}}
@@ -23,7 +23,7 @@
     </mat-menu>
   </mat-list-item>
 
-</mat-nav-list>
+</mat-list>
 
 <div class="center">
   <button mat-flat-button color="accent">

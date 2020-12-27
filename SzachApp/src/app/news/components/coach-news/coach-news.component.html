@@ -13,7 +13,7 @@
     </button>
     <mat-divider></mat-divider>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item>Przypisz do grup</button>
+      <button mat-menu-item (click)="goToAssign(news._id, news.name)">Przypisz do grup</button>
       <button mat-menu-item (click)="deleteNews(news._id)">Usuń</button>
     </mat-menu>
   </mat-list-item>

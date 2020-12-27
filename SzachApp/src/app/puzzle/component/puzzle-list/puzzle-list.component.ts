@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { PuzzleCoachHttpService } from '../../services/puzzle-coach-http.service';
 
 @Component({
@@ -10,12 +11,16 @@ export class PuzzleListComponent implements OnInit {
 
   puzzles = []
 
-  constructor(private puzzleCoachHttpService: PuzzleCoachHttpService) { }
+  constructor(private puzzleCoachHttpService: PuzzleCoachHttpService, private router: Router) { }
 
   ngOnInit(): void {
     this.puzzleCoachHttpService.getCoachPuzzlePackages().subscribe((puzzlePackages) => {
       this.puzzles = puzzlePackages
     });
+  }
+
+  goToAssign(id: string, name: string) {
+    this.router.navigateByUrl('/group-assign', { state: { id: id, type: 'puzzle', name: name } });
   }
 
   deletePuzzlePackage(id: string) {

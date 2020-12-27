@@ -34,7 +34,54 @@ export class GroupCoachHttpService {
   }
 
   editGroupName(groupId: string, name: string) {
-    console.log('a');
     return this.http.put<any>('http://localhost:5000/api/groups/' + groupId, { name: name });
+  }
+
+  assignToGroup(groupId: string, id: string, type: string){
+    switch (type) {
+      case 'news': {
+        return this.http.put<any>('http://localhost:5000/api/groups/assign-news/' + groupId, { news: id });
+      }
+      case 'debut': {
+        return this.http.put<any>('http://localhost:5000/api/groups/assign-debut/' + groupId, { debut: id });
+      }
+      case 'puzzle': {
+        return this.http.put<any>('http://localhost:5000/api/groups/assign-puzzle-package/' + groupId, { puzzlePackage: id });
+      }
+    }
+  }
+
+  unassignFromGroup(groupId: string, id: string, type: string) {
+    const params = new HttpParams().set('isDel', 'true');
+    switch (type) {
+      case 'news': {
+        return this.http.put<any>('http://localhost:5000/api/groups/assign-news/' + groupId, { news: id }, { params });
+      }
+      case 'debut': {
+        return this.http.put<any>('http://localhost:5000/api/groups/assign-debut/' + groupId, { debut: id }, { params });
+      }
+      case 'puzzle': {
+        return this.http.put<any>('http://localhost:5000/api/groups/assign-puzzle-package/' + groupId, { puzzlePackage: id }, { params });
+      }
+    }
+  }
+
+  getGroupsByAssigned(type: string, id: string){
+    let params: HttpParams;
+    switch (type) {
+      case 'news': {
+        params = new HttpParams().set('newsId', id);
+        break;
+      }
+      case 'debut': {
+        params = new HttpParams().set('debutId', id);
+        break;
+      }
+      case 'puzzle': {
+        params = new HttpParams().set('puzzlePackageId', id);
+        break;
+      }
+    }
+    return this.http.get<any>('http://localhost:5000/api/groups', {params});
   }
 }

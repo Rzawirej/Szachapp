@@ -1,0 +1,26 @@
+<h1 class="header">{{typeDisplay}} - {{name}}</h1>
+<div class="flex-row">
+
+  <span style="width: 100%;">
+    <h1 class="header">Grupy z przypisanym</h1>
+    <mat-selection-list #groupsAssigned>
+      <mat-list-option *ngFor="let group of assignedGroups" [value]="group._id">
+        {{group.name}}
+      </mat-list-option>
+    </mat-selection-list>
+  </span>
+
+  <span style="width: 100%;">
+    <h1 class="header">Grupy bez przypisania</h1>
+    <mat-selection-list #groupsNotAssigned>
+      <mat-list-option *ngFor="let group of notAssignedGroups" [value]="group._id">
+        {{group.name}}
+      </mat-list-option>
+    </mat-selection-list>
+  </span>
+
+</div>
+
+<button mat-raised-button color="accent" (click)="manageAssigning(groupsAssigned.selectedOptions.selected, groupsNotAssigned.selectedOptions.selected)" style="width: 100%;">
+  Zapisz
+</button>

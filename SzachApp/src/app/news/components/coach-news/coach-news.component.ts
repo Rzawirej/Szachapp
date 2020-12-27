@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { NewsCoachHttpService } from '../../services/news-coach-http.service';
 
 @Component({
@@ -12,7 +13,8 @@ export class CoachNewsComponent implements OnInit {
   newsList = []
   constructor(
     public dialog: MatDialog,
-    private newsCoachHttpServive: NewsCoachHttpService) { }
+    private newsCoachHttpServive: NewsCoachHttpService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.newsCoachHttpServive.getCoachNews().subscribe((news) => this.newsList = news);
@@ -23,6 +25,10 @@ export class CoachNewsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.newsCoachHttpServive.addNews(result.name, result.text).subscribe((news) => this.newsList.push(news));
     });
+  }
+
+  goToAssign(id: string, name: string){
+    this.router.navigateByUrl('/group-assign', { state: { id: id, type: 'news', name: name } });
   }
 
   deleteNews(id: string) {
