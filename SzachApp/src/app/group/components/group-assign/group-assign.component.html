@@ -4,7 +4,7 @@
   <span style="width: 100%;">
     <h1 class="header">Grupy z przypisanym</h1>
     <mat-selection-list #groupsAssigned>
-      <mat-list-option *ngFor="let group of assignedGroups" [value]="group._id">
+      <mat-list-option *ngFor="let group of assignedGroups" [value]="group._id" selected="true">
         {{group.name}}
       </mat-list-option>
     </mat-selection-list>

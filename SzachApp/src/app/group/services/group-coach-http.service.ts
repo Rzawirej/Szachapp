@@ -43,6 +43,7 @@ export class GroupCoachHttpService {
         return this.http.put<any>('http://localhost:5000/api/groups/assign-news/' + groupId, { news: id });
       }
       case 'debut': {
+        console.log(groupId, id, type);
         return this.http.put<any>('http://localhost:5000/api/groups/assign-debut/' + groupId, { debut: id });
       }
       case 'puzzle': {

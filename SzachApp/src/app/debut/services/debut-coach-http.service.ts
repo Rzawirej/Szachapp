@@ -17,4 +17,8 @@ export class DebutCoachHttpService {
     return this.http.post<any>('http://localhost:5000/api/debuts', debut);
   }
 
+  deleteDebut(debutId: string) {
+    return this.http.delete<any>('http://localhost:5000/api/debuts/'+debutId);
+  }
+
 }
