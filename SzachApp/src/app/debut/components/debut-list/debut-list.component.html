@@ -1,39 +1,11 @@
 <h1 class="header">Twoje debiuty</h1>
-<mat-form-field style="width: 96%; margin: 0px 20px;">
+
+<!--<mat-form-field style="width: 96%; margin: 0px 20px;">
   <input matInput placeholder="Wyszukaj...">
   <mat-icon matSuffix>search</mat-icon>
-</mat-form-field>
-<mat-list style="padding: 20px;">
-  <mat-list-item  *ngFor="let debut of debuts; let index=index" >
-    <mat-icon matListIcon color="accent">{{index<2?"error":'check'}}</mat-icon>
+</mat-form-field>-->
 
-    <h4 matLine>
-      Nazwa: {{debut.name}}
-    </h4>
-    <h4 matLine>
-      Ruchy: {{debut.firstMoves}}
-    </h4>
-    <button mat-raised-button color="accent" [matMenuTriggerFor]="menu">
-      Akcje
-    </button>
-    <mat-divider></mat-divider>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="goToAssign(debut._id, debut.name)">Przypisz do grup</button>
-      <button mat-menu-item (click)="deleteDebut(debut._id)">Usuń</button>
-    </mat-menu>
-  </mat-list-item>
-
-</mat-list>
-
-<div class="center">
-  <button mat-flat-button color="accent">
-    <mat-icon>navigate_before</mat-icon>
-  </button>
-  &nbsp;
-  <button mat-flat-button color="accent">
-    <mat-icon>navigate_next</mat-icon>
-  </button>
-</div>
+<app-szachapp-list [items]="debuts" [menuItems]="menuItems" mainInfoLabel="Nazwa" secondaryInfoLabel="Kolor"></app-szachapp-list>
 
 <button mat-fab class="fab" color="accent" routerLink="/new-debut">
   <mat-icon>add</mat-icon>

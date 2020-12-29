@@ -1,0 +1,21 @@
+<mat-list style="padding: 20px;">
+  <mat-list-item *ngFor="let item of items">
+    <mat-icon matListIcon color="accent">{{item.icon}}</mat-icon>
+
+        <h4 matLine>
+          {{mainInfoLabel}}: {{item.mainInfo}}
+        </h4>
+        <h4 matLine>
+          {{secondaryInfoLabel}}: {{item.secondaryInfo}}
+        </h4>
+        <button mat-raised-button color="accent" [matMenuTriggerFor]="menu">
+          Akcje
+        </button>
+        <mat-divider></mat-divider>
+        <mat-menu #menu="matMenu">
+          <span *ngFor="let menuItem of menuItems">
+            <button mat-menu-item (click)="menuItem.handler(item)">{{menuItem.description}}</button>
+          </span>
+        </mat-menu>
+  </mat-list-item>
+</mat-list>

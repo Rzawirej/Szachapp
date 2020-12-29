@@ -19,6 +19,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth/token.interceptor';
 import { AddParticipantDialog, ParticipantsListComponent } from './group/components/group-participants/participants-list/participants-list.component';
 import { GroupAssignComponent } from './group/components/group-assign/group-assign.component';
+import { SzachappListComponent } from './shared/components/szachapp-list/szachapp-list.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { GroupAssignComponent } from './group/components/group-assign/group-assi
     EditGroupDialog,
     AddParticipantDialog,
     ParticipantsListComponent,
-    GroupAssignComponent
+    GroupAssignComponent,
+    SzachappListComponent
   ],
   imports: [
     BrowserModule,

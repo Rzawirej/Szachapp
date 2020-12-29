@@ -1,3 +1,4 @@
+import { group } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -19,38 +20,75 @@ export class GroupListComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this.groupCoachHttpService.getCoachGroups().subscribe((groups) => this.groups = groups);
+    this.groupCoachHttpService.getCoachGroups().subscribe((groups) => {
+      this.groups = groups;
+      this.transformListToSharedList();
+    });
+  }
+
+  transformListToSharedList() {
+    for (let i = 0; i < this.groups.length; i++) {
+      this.transformItemToSharedListItem(this.groups[i]);
+    }
+  }
+
+  transformItemToSharedListItem(item: any) {
+    item.icon = 'check';
+    item.mainInfo = item.name;
+    item.secondaryInfo = item.participants.length;
+    return item;
   }
 
   openNewDialog(): void {
     const dialogRef = this.dialog.open(NewGroupDialog);
     dialogRef.afterClosed().subscribe(result => {
-      this.groupCoachHttpService.getCoachGroups().subscribe((groups) => this.groups = groups);
+      this.groupCoachHttpService.getCoachGroups().subscribe((groups) => {
+        this.groups = groups;
+        this.transformListToSharedList();
+      });
     });
 
   }
 
-  goToParticipants(groupId: string): void{
-    this.router.navigate(['/participants/'+groupId]);
+  goToParticipants = (group: any) => {
+    const { _id } = group;
+    this.router.navigate(['/participants/'+_id]);
   }
 
-  openEditDialog(groupId: string): void {
+  openEditDialog = (group: any) => {
+    const { _id } = group;
     const dialogRef = this.dialog.open(EditGroupDialog);
     dialogRef.afterClosed().subscribe(result => {
-      this.groupCoachHttpService.editGroupName(groupId, result).subscribe((oldGroup) => {
+      this.groupCoachHttpService.editGroupName(_id, result).subscribe((oldGroup) => {
         for(let i = 0; i<this.groups.length; i++){
           if(this.groups[i]._id === oldGroup._id){
             this.groups[i].name = result;
           }
         }
+        this.transformListToSharedList();
       });
     });
   }
 
-  deleteGroup(id: string){
-    this.groupCoachHttpService.deleteGroup(id).subscribe((group) => this.groups = this.groups.filter((value) => group._id !== value._id));
+  deleteGroup = (group: any) => {
+    const { _id } = group
+    this.groupCoachHttpService.deleteGroup(_id).subscribe((group) => this.groups = this.groups.filter((value) => group._id !== value._id));
   }
 
+  readonly menuItems = [
+    {
+      description: 'Uczestnicy',
+      handler: this.goToParticipants
+    },
+    {
+      description: 'Zmień nazwę',
+      handler: this.openEditDialog
+    },
+    {
+      description: 'Usuń',
+      handler: this.deleteGroup
+    }
+  ];
 }
 
 @Component({

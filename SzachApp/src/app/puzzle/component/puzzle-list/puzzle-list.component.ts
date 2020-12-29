@@ -15,16 +15,42 @@ export class PuzzleListComponent implements OnInit {
 
   ngOnInit(): void {
     this.puzzleCoachHttpService.getCoachPuzzlePackages().subscribe((puzzlePackages) => {
-      this.puzzles = puzzlePackages
+      this.puzzles = puzzlePackages;
+      this.transformListToSharedList();
     });
   }
 
-  goToAssign(id: string, name: string) {
-    this.router.navigateByUrl('/group-assign', { state: { id: id, type: 'puzzle', name: name } });
+  transformListToSharedList() {
+    for (let i = 0; i < this.puzzles.length; i++) {
+      this.transformItemToSharedListItem(this.puzzles[i]);
+    }
   }
 
-  deletePuzzlePackage(id: string) {
-    this.puzzleCoachHttpService.deletePuzzlePackage(id).subscribe((puzzlePackage) => this.puzzles = this.puzzles.filter((value) => puzzlePackage._id !== value._id));
+  transformItemToSharedListItem(item: any) {
+    item.icon = 'check';
+    item.mainInfo = item.name;
+    item.secondaryInfo = item.puzzles.length;
+    return item;
   }
 
+  goToAssign = (puzzlePackage: any) => {
+    const { _id, name } = puzzlePackage;
+    this.router.navigateByUrl('/group-assign', { state: { id: _id, type: 'puzzle', name: name } });
+  }
+
+  deletePuzzlePackage = (puzzlePackage: any) => {
+    const { _id } = puzzlePackage;
+    this.puzzleCoachHttpService.deletePuzzlePackage(_id).subscribe((puzzlePackage) => this.puzzles = this.puzzles.filter((value) => puzzlePackage._id !== value._id));
+  }
+
+  readonly menuItems = [
+    {
+      description: 'Przypisz do grupy',
+      handler: this.goToAssign
+    },
+    {
+      description: 'Usuń',
+      handler: this.deletePuzzlePackage
+    }
+  ]
 }

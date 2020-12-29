@@ -17,23 +17,50 @@ export class CoachNewsComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
-    this.newsCoachHttpServive.getCoachNews().subscribe((news) => this.newsList = news);
+    this.newsCoachHttpServive.getCoachNews().subscribe((news) => { this.newsList = news; this.transformListToSharedList() });
+  }
+
+  transformListToSharedList() {
+    for (let i = 0; i < this.newsList.length; i++) {
+      this.transformItemToSharedListItem(this.newsList[i]);
+    }
+  }
+
+  transformItemToSharedListItem(item: any) {
+    item.icon = 'check';
+    item.mainInfo = item.name;
+    item.secondaryInfo = item.text;
+    return item;
   }
 
   openDialog() {
     const dialogRef = this.dialog.open(NewNewsDialog);
     dialogRef.afterClosed().subscribe(result => {
-      this.newsCoachHttpServive.addNews(result.name, result.text).subscribe((news) => this.newsList.push(news));
+      this.newsCoachHttpServive.addNews(result.name, result.text).subscribe((news) => this.newsList.push(this.transformItemToSharedListItem(news)));
     });
   }
 
-  goToAssign(id: string, name: string){
-    this.router.navigateByUrl('/group-assign', { state: { id: id, type: 'news', name: name } });
+  goToAssign = (news: any) => {
+    const { _id, name } = news;
+    console.log(this.router);
+    this.router.navigateByUrl('/group-assign', { state: { id: _id, type: 'news', name: name } });
+    console.log(1);
   }
 
-  deleteNews(id: string) {
-    this.newsCoachHttpServive.deleteNews(id).subscribe((news) => this.newsList = this.newsList.filter((value) => news._id !== value._id));
+  deleteNews = (news: any) => {
+    const { _id } = news;
+    this.newsCoachHttpServive.deleteNews(_id).subscribe((news) => this.newsList = this.newsList.filter((value) => news._id !== value._id));
   }
+
+  readonly menuItems = [{
+    description: 'Przypisz do grupy',
+    handler: this.goToAssign
+  },
+  {
+    description: 'Usuń',
+    handler: this.deleteNews
+  }
+  ]
 }
 
 @Component({

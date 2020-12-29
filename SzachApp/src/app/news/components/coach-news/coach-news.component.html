@@ -1,34 +1,6 @@
 <h1 class="header">Ogłoszenia</h1>
-<mat-list style="padding: 20px;">
-  <mat-list-item *ngFor="let news of newsList; let index=index">
-    <mat-icon matListIcon color="accent">{{index<2?"error":'check'}}</mat-icon>
-    <h4 matLine>
-      Nazwa: {{news.name}}
-    </h4>
-    <h4 matLine>
-      Treść: {{news.text}}
-    </h4>
-    <button mat-raised-button color="accent" [matMenuTriggerFor]="menu">
-      Akcje
-    </button>
-    <mat-divider></mat-divider>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="goToAssign(news._id, news.name)">Przypisz do grup</button>
-      <button mat-menu-item (click)="deleteNews(news._id)">Usuń</button>
-    </mat-menu>
-  </mat-list-item>
 
-</mat-list>
-
-<div class="center">
-  <button mat-flat-button color="accent">
-    <mat-icon>navigate_before</mat-icon>
-  </button>
-  &nbsp;
-  <button mat-flat-button color="accent">
-    <mat-icon>navigate_next</mat-icon>
-  </button>
-</div>
+<app-szachapp-list [items]="newsList" [menuItems]="menuItems" mainInfoLabel="Nazwa" secondaryInfoLabel="Treść"></app-szachapp-list>
 
 <button mat-fab class="fab" color="accent" (click)="openDialog()">
   <mat-icon>add</mat-icon>

@@ -1,39 +1,6 @@
 <h1 class="header">Twoje grupy</h1>
-<mat-list style="padding: 20px;">
-  <mat-list-item *ngFor="let group of groups;">
-    <h4 matLine>
-      Nazwa: {{group.name}}
-    </h4>
-    <h4 matLine>
-      Ilość uczestników: {{group.participants.length}}
-    </h4>
-    <button mat-raised-button color="accent" [matMenuTriggerFor]="menu" [matMenuTriggerData]="group.name">
-      Akcje
-    </button>
-    <mat-divider></mat-divider>
-    <mat-menu #menu="matMenu">
-      <ng-template matMenuContent let-items="menuItems">
-        <button mat-menu-item>Przypisz debiuty</button>
-        <button mat-menu-item>Przypisz zadania</button>
-        <button mat-menu-item (click)="goToParticipants(group._id)">Uczestnicy</button>
-        <button mat-menu-item (click)="openEditDialog(group._id)">Zmień nazwę</button>
-        <button mat-menu-item (click)="deleteGroup(group._id)">Usuń</button>
-      </ng-template>
 
-    </mat-menu>
-  </mat-list-item>
-
-</mat-list>
-
-<div class="center">
-  <button mat-flat-button color="accent">
-    <mat-icon>navigate_before</mat-icon>
-  </button>
-  &nbsp;
-  <button mat-flat-button color="accent">
-    <mat-icon>navigate_next</mat-icon>
-  </button>
-</div>
+<app-szachapp-list [items]="groups" [menuItems]="menuItems" mainInfoLabel="Nazwa" secondaryInfoLabel="Ilość uczestników"></app-szachapp-list>
 
 <button mat-fab class="fab" color="accent" (click)="openNewDialog()">
   <mat-icon>add</mat-icon>
