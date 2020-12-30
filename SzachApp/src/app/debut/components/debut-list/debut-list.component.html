@@ -1,4 +1,4 @@
-<h1 class="header">Twoje debiuty</h1>
+<h1 class="header">{{activeGroup ? 'Debiuty grupy' : 'Debiuty trenera'}}</h1>
 
 <!--<mat-form-field style="width: 96%; margin: 0px 20px;">
   <input matInput placeholder="Wyszukaj...">
@@ -7,6 +7,6 @@
 
 <app-szachapp-list [items]="debuts" [menuItems]="menuItems" mainInfoLabel="Nazwa" secondaryInfoLabel="Kolor"></app-szachapp-list>
 
-<button mat-fab class="fab" color="accent" routerLink="/new-debut">
+<button mat-fab class="fab" color="accent" routerLink="/new-debut" *ngIf="!activeGroup">
   <mat-icon>add</mat-icon>
 </button>

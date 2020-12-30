@@ -13,6 +13,10 @@ export class DebutCoachHttpService {
     return this.http.get<any>('http://localhost:5000/api/debuts');
   }
 
+  getGroupDebuts(groupId: string) {
+    return this.http.get<any>('http://localhost:5000/api/debuts/group/' + groupId);
+  }
+
   saveDebut(debut: Debut){
     return this.http.post<any>('http://localhost:5000/api/debuts', debut);
   }

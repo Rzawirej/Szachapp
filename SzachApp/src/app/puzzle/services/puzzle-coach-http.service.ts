@@ -13,6 +13,10 @@ export class PuzzleCoachHttpService {
     return this.http.get<any>('http://localhost:5000/api/puzzle-packages');
   }
 
+  getGroupPuzzlePackages(groupId: string) {
+    return this.http.get<any>('http://localhost:5000/api/puzzle-packages/group/'+groupId);
+  }
+
   addPuzzlePackage(name: string, puzzles: Puzzle[]) {
     return this.http.post<any>('http://localhost:5000/api/puzzle-packages', { name: name, puzzles: puzzles });
   }

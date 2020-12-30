@@ -8,10 +8,10 @@ import { Observable } from 'rxjs';
 })
 export class ToolbarComponent implements OnInit {
 
-  activeGroup$: Observable<number>;
+  activeGroup$: Observable<string>;
   groupName = '';
 
-  constructor(private store: Store<{ activeGroup: any }>) {
+  constructor(private store: Store<{ activeGroup: string }>) {
     this.activeGroup$ = store.select('activeGroup');
   }
 

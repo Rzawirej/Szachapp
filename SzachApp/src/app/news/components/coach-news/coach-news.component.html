@@ -1,7 +1,26 @@
 <h1 class="header">Ogłoszenia</h1>
 
-<app-szachapp-list [items]="newsList" [menuItems]="menuItems" mainInfoLabel="Nazwa" secondaryInfoLabel="Treść"></app-szachapp-list>
 
-<button mat-fab class="fab" color="accent" (click)="openDialog()">
-  <mat-icon>add</mat-icon>
-</button>
+<span *ngIf="!activeGroup; else newsBoard">
+  <app-szachapp-list [items]="newsList" [menuItems]="menuItems" mainInfoLabel="Nazwa" secondaryInfoLabel="Treść"></app-szachapp-list>
+
+  <button mat-fab class="fab" color="accent" (click)="openDialog()">
+    <mat-icon>add</mat-icon>
+  </button>
+</span>
+
+<ng-template #newsBoard >
+  <span *ngFor="let news of newsList">
+    <mat-card class="example-card" style="display: inline-block;">
+      <mat-card-header>
+        <mat-card-title>{{news.name}}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>
+          {{news.text}}
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </span>
+
+</ng-template>

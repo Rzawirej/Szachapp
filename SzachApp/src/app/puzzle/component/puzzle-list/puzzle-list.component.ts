@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { PuzzleCoachHttpService } from '../../services/puzzle-coach-http.service';
 
 @Component({
@@ -10,14 +12,29 @@ import { PuzzleCoachHttpService } from '../../services/puzzle-coach-http.service
 export class PuzzleListComponent implements OnInit {
 
   puzzles = []
+  activeGroup = '';
+  menuItems = [];
 
-  constructor(private puzzleCoachHttpService: PuzzleCoachHttpService, private router: Router) { }
+  constructor(private puzzleCoachHttpService: PuzzleCoachHttpService, private router: Router, private store: Store<{ activeGroup: string }>) {
+
+  }
 
   ngOnInit(): void {
-    this.puzzleCoachHttpService.getCoachPuzzlePackages().subscribe((puzzlePackages) => {
-      this.puzzles = puzzlePackages;
-      this.transformListToSharedList();
-    });
+    this.activeGroup = localStorage.getItem('activeGroup');
+    if(this.activeGroup){
+      this.puzzleCoachHttpService.getGroupPuzzlePackages(this.activeGroup).subscribe((puzzlePackages) => {
+        this.puzzles = puzzlePackages;
+        this.transformListToSharedList();
+      });
+      this.menuItems = this.groupMenuItems;
+    }else{
+      this.puzzleCoachHttpService.getCoachPuzzlePackages().subscribe((puzzlePackages) => {
+        this.puzzles = puzzlePackages;
+        this.transformListToSharedList();
+      });
+      this.menuItems = this.coachMenuItems
+    }
+
   }
 
   transformListToSharedList() {
@@ -43,7 +60,12 @@ export class PuzzleListComponent implements OnInit {
     this.puzzleCoachHttpService.deletePuzzlePackage(_id).subscribe((puzzlePackage) => this.puzzles = this.puzzles.filter((value) => puzzlePackage._id !== value._id));
   }
 
-  readonly menuItems = [
+  goToPuzzlePackage = (puzzlePackage: any) => {
+    const { _id } = puzzlePackage;
+    console.log('goToPuzzlePackage');
+  }
+
+  readonly coachMenuItems = [
     {
       description: 'Przypisz do grupy',
       handler: this.goToAssign
@@ -51,6 +73,13 @@ export class PuzzleListComponent implements OnInit {
     {
       description: 'Usuń',
       handler: this.deletePuzzlePackage
+    }
+  ]
+
+  readonly groupMenuItems = [
+    {
+      description: 'Rozwiąż',
+      handler: this.goToPuzzlePackage
     }
   ]
 }

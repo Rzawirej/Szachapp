@@ -10,14 +10,22 @@ import { NewsCoachHttpService } from '../../services/news-coach-http.service';
 })
 export class CoachNewsComponent implements OnInit {
 
-  newsList = []
+  newsList = [];
+  activeGroup ='';
+
   constructor(
     public dialog: MatDialog,
     private newsCoachHttpServive: NewsCoachHttpService,
     private router: Router) { }
 
   ngOnInit(): void {
-    this.newsCoachHttpServive.getCoachNews().subscribe((news) => { this.newsList = news; this.transformListToSharedList() });
+    this.activeGroup = localStorage.getItem('activeGroup');
+    if (this.activeGroup) {
+      this.newsCoachHttpServive.getGroupNews(this.activeGroup).subscribe((news) => { this.newsList = news; this.transformListToSharedList() });
+    } else {
+      this.newsCoachHttpServive.getCoachNews().subscribe((news) => { this.newsList = news; this.transformListToSharedList() });
+    }
+
   }
 
   transformListToSharedList() {

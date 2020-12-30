@@ -12,6 +12,10 @@ export class NewsCoachHttpService {
     return this.http.get<any>('http://localhost:5000/api/news');
   }
 
+  getGroupNews(groupId: string) {
+    return this.http.get<any>('http://localhost:5000/api/news/group/' + groupId);
+  }
+
   addNews(name: string, text: string) {
     return this.http.post<any>('http://localhost:5000/api/news', { name: name, text: text });
   }

@@ -10,10 +10,20 @@ import { DebutCoachHttpService } from '../../services/debut-coach-http.service';
 export class DebutListComponent implements OnInit {
 
   debuts = [];
+  activeGroup = '';
+  menuItems = [];
+
   constructor(private debutCoachHttpService: DebutCoachHttpService, private router: Router) { }
 
   ngOnInit(): void {
-    this.debutCoachHttpService.getDebuts().subscribe((debuts) => { this.debuts = debuts; this.transformListToSharedList();});
+    this.activeGroup = localStorage.getItem('activeGroup');
+    if(this.activeGroup){
+      this.debutCoachHttpService.getGroupDebuts(this.activeGroup).subscribe((debuts) => { this.debuts = debuts; this.transformListToSharedList(); });
+      this.menuItems = this.groupMenuItems;
+    }else{
+      this.debutCoachHttpService.getDebuts().subscribe((debuts) => { this.debuts = debuts; this.transformListToSharedList(); });
+      this.menuItems = this.coachMenuItems;
+    }
   }
 
   transformListToSharedList() {
@@ -39,7 +49,12 @@ export class DebutListComponent implements OnInit {
     this.debutCoachHttpService.deleteDebut(_id).subscribe((debut) => this.debuts = this.debuts.filter((value) => debut._id !== value._id));
   }
 
-  readonly menuItems = [
+  goToDebut = (debut: any) => {
+    const { _id } = debut;
+    console.log('go to debut');
+  }
+
+  readonly coachMenuItems = [
     {
       description: 'Przypisz do grupy',
       handler: this.goToAssign
@@ -47,6 +62,13 @@ export class DebutListComponent implements OnInit {
     {
       description: 'Usuń',
       handler: this.deleteDebut
+    }
+  ];
+
+  readonly groupMenuItems = [
+    {
+      description: 'Przeglądaj',
+      handler: this.goToDebut
     }
   ];
 }

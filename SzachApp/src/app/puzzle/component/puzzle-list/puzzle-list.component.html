@@ -1,7 +1,7 @@
-<h1 class="header">Twoje paczki zadań</h1>
+<h1 class="header">{{activeGroup ? 'Zadania grupy' : 'Twoje zadania'}}</h1>
 
 <app-szachapp-list [items]="puzzles" [menuItems]="menuItems" mainInfoLabel="Nazwa" secondaryInfoLabel="Ilość zadań"></app-szachapp-list>
 
-<button mat-fab class="fab" color="accent" routerLink="/new-puzzles">
+<button mat-fab class="fab" color="accent" routerLink="/new-puzzles" *ngIf='!activeGroup'>
   <mat-icon>add</mat-icon>
 </button>
