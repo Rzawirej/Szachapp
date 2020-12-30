@@ -24,8 +24,22 @@ export class ParticipantsListComponent implements OnInit {
       this.groupCoachHttpServive.getParticipants(this.groupId).subscribe((group) => {
         this.groupName = group.name;
         this.participants = group.participants;
+        this.transformListToSharedList();
       });
     });
+  }
+
+  transformListToSharedList() {
+    for (let i = 0; i < this.participants.length; i++) {
+      this.transformItemToSharedListItem(this.participants[i]);
+    }
+  }
+
+  transformItemToSharedListItem(item: any) {
+    item.icon = 'check';
+    item.mainInfo = `${item.name} ${item.surname}`;
+    item.secondaryInfo = item.email;
+    return item;
   }
 
   openDialog() {
@@ -43,14 +57,22 @@ export class ParticipantsListComponent implements OnInit {
       this.groupCoachHttpServive.getParticipants(this.groupId).subscribe((group) => {
         this.groupName = group.name;
         this.participants = group.participants;
+        this.transformListToSharedList();
       });
     });
   }
 
-  deleteParticipant(participantEmail: string, participantId: string) {
-    this.groupCoachHttpServive.deleteParticipant(this.groupId, participantEmail).subscribe((participants) => this.participants = this.participants.filter((value) => participantId !== value._id));
+  deleteParticipant = (participant: any) => {
+    const {email, _id} = participant;
+    this.groupCoachHttpServive.deleteParticipant(this.groupId, email).subscribe((participants) => this.participants = this.participants.filter((value) => _id !== value._id));
   }
 
+  readonly menuItems = [
+    {
+      description: 'Usuń',
+      handler: this.deleteParticipant
+    }
+  ];
 }
 
 @Component({

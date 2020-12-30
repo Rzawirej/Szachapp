@@ -12,6 +12,10 @@ export class GroupCoachHttpService {
     return this.http.get<any>('http://localhost:5000/api/groups');
   }
 
+  getParticipantGroups() {
+    return this.http.get<any>('http://localhost:5000/api/groups/participantGroups');
+  }
+
   addGroup(name: string) {
     return this.http.post<any>('http://localhost:5000/api/groups', {name: name});
   }

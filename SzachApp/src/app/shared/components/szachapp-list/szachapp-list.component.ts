@@ -18,7 +18,7 @@ export class SzachappListComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.items, this.menuItems, this.mainInfoLabel, this.secondaryInfoLabel);
+
   }
 
 }

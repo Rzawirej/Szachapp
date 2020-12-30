@@ -1,8 +1,9 @@
-import { group } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { GroupCoachHttpService } from '../../services/group-coach-http.service';
+import { save, remove } from '../../../shared/store/actions/active-group.action';
 
 @Component({
   selector: 'app-group-list',
@@ -11,28 +12,47 @@ import { GroupCoachHttpService } from '../../services/group-coach-http.service';
 })
 export class GroupListComponent implements OnInit {
 
-  groups = []
+  coachGroups = []
+  participantGroups = []
 
   constructor(
     public dialog: MatDialog,
     private groupCoachHttpService: GroupCoachHttpService,
-    private router: Router
+    private router: Router,
+    private store: Store<{ activeGroup: any }>
     ) { }
 
   ngOnInit(): void {
     this.groupCoachHttpService.getCoachGroups().subscribe((groups) => {
-      this.groups = groups;
-      this.transformListToSharedList();
+      this.coachGroups = groups;
+      this.transformCoachGroupsToSzachappList();
+    });
+    this.groupCoachHttpService.getParticipantGroups().subscribe((groups) => {
+      this.participantGroups = groups;
+      this.transformParticipantGroupsToSzachappList();
     });
   }
 
-  transformListToSharedList() {
-    for (let i = 0; i < this.groups.length; i++) {
-      this.transformItemToSharedListItem(this.groups[i]);
+  transformCoachGroupsToSzachappList() {
+    for (let i = 0; i < this.coachGroups.length; i++) {
+      this.transformCoachGroupsItemToSzachappListItem(this.coachGroups[i]);
     }
   }
 
-  transformItemToSharedListItem(item: any) {
+  transformCoachGroupsItemToSzachappListItem(item: any) {
+    item.icon = 'check';
+    item.mainInfo = item.name;
+    item.secondaryInfo = item.participants.length;
+    return item;
+  }
+
+  transformParticipantGroupsToSzachappList() {
+    for (let i = 0; i < this.participantGroups.length; i++) {
+      this.transformParticipantGroupsItemToSzachappListItem(this.participantGroups[i]);
+    }
+  }
+
+  transformParticipantGroupsItemToSzachappListItem(item: any) {
     item.icon = 'check';
     item.mainInfo = item.name;
     item.secondaryInfo = item.participants.length;
@@ -43,8 +63,8 @@ export class GroupListComponent implements OnInit {
     const dialogRef = this.dialog.open(NewGroupDialog);
     dialogRef.afterClosed().subscribe(result => {
       this.groupCoachHttpService.getCoachGroups().subscribe((groups) => {
-        this.groups = groups;
-        this.transformListToSharedList();
+        this.coachGroups = groups;
+        this.transformCoachGroupsToSzachappList();
       });
     });
 
@@ -60,22 +80,35 @@ export class GroupListComponent implements OnInit {
     const dialogRef = this.dialog.open(EditGroupDialog);
     dialogRef.afterClosed().subscribe(result => {
       this.groupCoachHttpService.editGroupName(_id, result).subscribe((oldGroup) => {
-        for(let i = 0; i<this.groups.length; i++){
-          if(this.groups[i]._id === oldGroup._id){
-            this.groups[i].name = result;
+        for(let i = 0; i<this.coachGroups.length; i++){
+          if(this.coachGroups[i]._id === oldGroup._id){
+            this.coachGroups[i].name = result;
           }
         }
-        this.transformListToSharedList();
+        this.transformCoachGroupsToSzachappList();
       });
     });
   }
 
   deleteGroup = (group: any) => {
-    const { _id } = group
-    this.groupCoachHttpService.deleteGroup(_id).subscribe((group) => this.groups = this.groups.filter((value) => group._id !== value._id));
+    const { _id } = group;
+    this.groupCoachHttpService.deleteGroup(_id).subscribe((group) => this.coachGroups = this.coachGroups.filter((value) => group._id !== value._id));
   }
 
-  readonly menuItems = [
+  activateGroup = (group: any) => {
+    const { _id, name } = group;
+    localStorage.setItem('activeGroup', _id);
+    localStorage.setItem('activeGroupName', name);
+    this.store.dispatch(save());
+  }
+
+  leaveGroup = (group: any) => {
+    localStorage.removeItem('activeGroup');
+    localStorage.removeItem('activeGroupName');
+    this.store.dispatch(remove());
+  }
+
+  readonly coachMenuItems = [
     {
       description: 'Uczestnicy',
       handler: this.goToParticipants
@@ -87,6 +120,17 @@ export class GroupListComponent implements OnInit {
     {
       description: 'Usuń',
       handler: this.deleteGroup
+    }
+  ];
+
+  readonly participantMenuItems = [
+    {
+      description: 'Aktywuj',
+      handler: this.activateGroup
+    },
+    {
+      description: 'Opuść',
+      handler: this.leaveGroup
     }
   ];
 }

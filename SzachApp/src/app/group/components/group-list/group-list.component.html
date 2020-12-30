@@ -1,6 +1,16 @@
-<h1 class="header">Twoje grupy</h1>
 
-<app-szachapp-list [items]="groups" [menuItems]="menuItems" mainInfoLabel="Nazwa" secondaryInfoLabel="Ilość uczestników"></app-szachapp-list>
+
+<span class="flex-row">
+  <span style="width: 100%">
+    <h1 class="header">Grupy trenera</h1>
+    <app-szachapp-list [items]="coachGroups" [menuItems]="coachMenuItems" mainInfoLabel="Nazwa" secondaryInfoLabel="Ilość uczestników"></app-szachapp-list>
+  </span>
+  <span style="width: 100%">
+    <h1 class="header">Grupy uczestnika</h1>
+    <app-szachapp-list [items]="participantGroups" [menuItems]="participantMenuItems" mainInfoLabel="Nazwa" secondaryInfoLabel="Ilość uczestników"></app-szachapp-list>
+  </span>
+</span>
+
 
 <button mat-fab class="fab" color="accent" (click)="openNewDialog()">
   <mat-icon>add</mat-icon>

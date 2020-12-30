@@ -1,23 +1,6 @@
 <h1 class="header">{{groupName}} - Uczestnicy</h1>
-<mat-list style="padding: 20px;">
-  <mat-list-item *ngFor="let participant of participants; let index=index">
-    <mat-icon matListIcon color="accent">{{index<2?"error":'check'}}</mat-icon>
-        <h4 matLine>
-          Imię i nazwisko: {{participant.name}} {{participant.surname}}
-        </h4>
-        <h4 matLine>
-          Email: {{participant.email}}
-        </h4>
-        <button mat-raised-button color="accent" [matMenuTriggerFor]="menu">
-          Akcje
-        </button>
-        <mat-divider></mat-divider>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="deleteParticipant(participant.email, participant._id)">Usuń</button>
-        </mat-menu>
-  </mat-list-item>
 
-</mat-list>
+<app-szachapp-list [items]="participants" [menuItems]="menuItems" mainInfoLabel="Imię i nazwisko" secondaryInfoLabel="E-mail"></app-szachapp-list>
 
 <button mat-fab class="fab" color="accent" (click)="openDialog()">
   <mat-icon>add</mat-icon>
