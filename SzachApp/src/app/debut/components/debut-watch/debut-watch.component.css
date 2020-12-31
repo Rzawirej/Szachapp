@@ -1,0 +1,9 @@
+.highlight-move {
+  color: red;
+}
+#debut-board {
+  width: 250%;
+}
+.moves-section{
+  margin-left: 10px;
+}

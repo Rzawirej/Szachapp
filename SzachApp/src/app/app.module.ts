@@ -23,6 +23,7 @@ import { AuthInterceptor } from './auth/token.interceptor';
 import { AddParticipantDialog, ParticipantsListComponent } from './group/components/group-participants/participants-list/participants-list.component';
 import { GroupAssignComponent } from './group/components/group-assign/group-assign.component';
 import { SzachappListComponent } from './shared/components/szachapp-list/szachapp-list.component';
+import { DebutWatchComponent } from './debut/components/debut-watch/debut-watch.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { SzachappListComponent } from './shared/components/szachapp-list/szachap
     AddParticipantDialog,
     ParticipantsListComponent,
     GroupAssignComponent,
-    SzachappListComponent
+    SzachappListComponent,
+    DebutWatchComponent
   ],
   imports: [
     BrowserModule,

@@ -51,7 +51,7 @@ export class DebutListComponent implements OnInit {
 
   goToDebut = (debut: any) => {
     const { _id } = debut;
-    console.log('go to debut');
+    this.router.navigate(['debut', _id]);
   }
 
   readonly coachMenuItems = [

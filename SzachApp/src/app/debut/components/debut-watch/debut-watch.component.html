@@ -1,0 +1,57 @@
+<h1 class="header">Przeglądasz {{debut.name}}</h1>
+
+<div class="flex-row" style="padding: 20px;">
+  <div>
+    <div>
+      <div id="debut-board"></div>
+      <div class="center">
+        <button mat-flat-button color="accent" (click)="prevMove()">
+          <mat-icon>navigate_before</mat-icon>
+        </button>
+        &nbsp;
+        <button mat-flat-button color="accent" (click)="nextMove()">
+          <mat-icon>navigate_next</mat-icon>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="moves-section">
+    <mat-card>
+      <div class="center">
+        {{playersString}}
+      </div>
+      <span *ngFor="let move of gameState.moveArray; let first = first;" (click)="goToMove($event, move)"
+        style="cursor: pointer;">
+        <ng-container *ngTemplateOutlet="moveTemplate; context:{move: move, first: first}"></ng-container>
+      </span>
+      <ng-template #moveTemplate let-move="move" let-first="first" let-uniqeCode="uniqeCode">
+        <span *ngIf="move.color === 'white'">{{move.move_number+' '}}</span>
+        <span *ngIf="move.color === 'black' && first">{{move.move_number+'... '}}</span>
+        <span [ngClass]="{'highlight-move': highlight === move.id}">{{move.move+' '}}</span>
+        <span *ngFor="let branch of move.branch;">
+          <span *ngFor="let branchMove of branch; let last = last;" (click)="goToMove($event, branchMove)"
+            style="cursor: pointer;">
+            <span *ngIf="branchMove.isBranchStart">(</span>
+            <ng-container *ngTemplateOutlet="moveTemplate; context:{move: branchMove, first: branchMove.isBranchStart}">
+            </ng-container>
+            <span *ngIf="last">)&nbsp;</span>
+          </span>
+        </span>
+      </ng-template>
+      {{gameResult}}
+    </mat-card>
+    <div class="center">
+      <button mat-flat-button color="accent" (click)="goToPrevGame()">
+        <mat-icon>navigate_before</mat-icon>
+      </button>
+      &nbsp;
+      <button mat-flat-button color="accent" (click)="goToNextGame()">
+        <mat-icon>navigate_next</mat-icon>
+      </button>
+    </div>
+
+  </div>
+
+</div>
