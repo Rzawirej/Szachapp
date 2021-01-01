@@ -1,0 +1,30 @@
+<h1 class="header">Podaj rozwiązanie</h1>
+<div class="flex-row" style="padding: 20px;">
+  <div>
+    <div id="answer-board" style="width:400px"></div>
+  </div>
+
+  <div class="moves-section">
+    <mat-card style="width: 600px;">
+      <span *ngFor="let move of moves; let index = index;">
+        <span *ngIf="index%2 === 0">{{index/2+1+' '}}</span>
+        <span>{{move+' '}}</span>
+      </span>
+    </mat-card>
+
+    <span *ngIf="puzzleEnded === true">
+      <button mat-flat-button color="accent" (click)="nextPuzzle()" *ngIf="goodAnswer === true; else badAnswer">
+        <span>Kolejne zadanie</span>
+      </button>
+
+      <ng-template #badAnswer>
+        <button mat-flat-button color="warn" (click)="nextPuzzle()">
+          <span>Kolejne zadanie</span>
+        </button>
+      </ng-template>
+
+    </span>
+
+  </div>
+
+</div>

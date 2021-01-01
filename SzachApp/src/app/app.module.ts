@@ -24,6 +24,7 @@ import { AddParticipantDialog, ParticipantsListComponent } from './group/compone
 import { GroupAssignComponent } from './group/components/group-assign/group-assign.component';
 import { SzachappListComponent } from './shared/components/szachapp-list/szachapp-list.component';
 import { DebutWatchComponent } from './debut/components/debut-watch/debut-watch.component';
+import { PuzzleSolveComponent } from './puzzle/component/puzzle-solve/puzzle-solve.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { DebutWatchComponent } from './debut/components/debut-watch/debut-watch.
     ParticipantsListComponent,
     GroupAssignComponent,
     SzachappListComponent,
-    DebutWatchComponent
+    DebutWatchComponent,
+    PuzzleSolveComponent
   ],
   imports: [
     BrowserModule,

@@ -9,6 +9,7 @@ import { ParticipantsListComponent } from './group/components/group-participants
 import { CoachNewsComponent } from './news/components/coach-news/coach-news.component';
 import { AddPuzzleComponent } from './puzzle/component/add-puzzle/add-puzzle.component';
 import { PuzzleListComponent } from './puzzle/component/puzzle-list/puzzle-list.component';
+import { PuzzleSolveComponent } from './puzzle/component/puzzle-solve/puzzle-solve.component';
 
 
 const routes: Routes = [
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'debut', component: DebutListComponent },
   { path: 'new-debut', component: DebutTrainingComponent },
   { path: 'news', component: CoachNewsComponent },
+  { path: 'puzzles/:puzzlePackageId', component: PuzzleSolveComponent },
   { path: 'puzzles', component: PuzzleListComponent },
   { path: 'new-puzzles', component: AddPuzzleComponent},
   { path: 'participants/:groupId', component: ParticipantsListComponent},

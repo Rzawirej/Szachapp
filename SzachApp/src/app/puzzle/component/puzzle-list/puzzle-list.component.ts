@@ -62,7 +62,7 @@ export class PuzzleListComponent implements OnInit {
 
   goToPuzzlePackage = (puzzlePackage: any) => {
     const { _id } = puzzlePackage;
-    console.log('goToPuzzlePackage');
+    this.router.navigate(['puzzles', _id]);
   }
 
   readonly coachMenuItems = [
