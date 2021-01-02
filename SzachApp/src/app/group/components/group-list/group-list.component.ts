@@ -102,10 +102,14 @@ export class GroupListComponent implements OnInit {
     this.store.dispatch(save());
   }
 
-  leaveGroup = (group: any) => {
+  deactivateGroup = (group: any) => {
     localStorage.removeItem('activeGroup');
     localStorage.removeItem('activeGroupName');
     this.store.dispatch(remove());
+  }
+
+  leaveGroup = (group: any) => {
+    console.log('leave');
   }
 
   readonly coachMenuItems = [
@@ -127,6 +131,21 @@ export class GroupListComponent implements OnInit {
     {
       description: 'Aktywuj',
       handler: this.activateGroup
+    },
+    {
+      description: 'Deaktywuj',
+      handler: this.deactivateGroup
+    },
+    {
+      description: 'Opuść',
+      handler: this.leaveGroup
+    }
+  ];
+
+  readonly participantActiveMenuItems = [
+    {
+      description: 'Deaktywuj',
+      handler: this.deactivateGroup
     },
     {
       description: 'Opuść',

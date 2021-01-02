@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { Puzzle } from '../../models/puzzle.model';
 import Chess from "chess.js";
 import { PuzzleCoachHttpService } from '../../services/puzzle-coach-http.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 declare var ChessBoard: any;
 
@@ -21,23 +21,33 @@ export class PuzzleSolveComponent implements OnInit {
   goodAnswer = true;
   color = 'white';
   puzzleEnded = false;
+  allSolved = false;
+  groupId = '';
 
   @HostListener('window:resize', ['$event'])
   onResize() {
     if (this.answerBoard) {
       this.answerBoard.resize();
     }
-
   }
 
-  constructor(private puzzleCoachHttpService: PuzzleCoachHttpService, private route: ActivatedRoute) { }
+  constructor(private puzzleCoachHttpService: PuzzleCoachHttpService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
+    this.groupId = localStorage.getItem('activeGroup');
     this.route.params.subscribe(params => {
       this.puzzleCoachHttpService.getPuzzlePackage(params['puzzlePackageId']).subscribe((puzzlePackage) => {
         this.puzzlePackage = puzzlePackage;
-        this.initAnswerBoard(this.puzzlePackage.puzzles[this.puzzleNumber]);
+        this.puzzleCoachHttpService.getAnswersPuzzlePackage(this.groupId, this.puzzlePackage._id).subscribe((solutions) => {
+          if (solutions.length === this.puzzlePackage.puzzles.length) {
+            this.router.navigate(['puzzles']);
+          }
+          this.puzzleNumber = solutions.length;
+          this.initAnswerBoard(this.puzzlePackage.puzzles[this.puzzleNumber]);
+        })
+
       });
+
     });
   }
 
@@ -90,18 +100,34 @@ export class PuzzleSolveComponent implements OnInit {
     if (move.san === this.puzzlePackage.puzzles[this.puzzleNumber].answer[this.moveNumber]){
       if (this.moveNumber >= this.puzzlePackage.puzzles[this.puzzleNumber].answer.length-1){
         this.saveAnswer();
+        return move;
       }
     } else {
       this.goodAnswer = false;
       this.saveAnswer();
+      return move;
     }
     this.moveNumber++;
+    this.oponentMove();
+    return move;
+  }
 
+  async oponentMove(){
+    await new Promise(r => setTimeout(r, 400));
+    this.moves.push(this.puzzlePackage.puzzles[this.puzzleNumber].answer[this.moveNumber]);
+    this.game.move(this.puzzlePackage.puzzles[this.puzzleNumber].answer[this.moveNumber]);
+    this.answerBoard.position(this.game.fen())
+    this.moveNumber++;
   }
 
   saveAnswer(){
     this.blockBoard();
-    //save answer
+    this.puzzleCoachHttpService.answerPuzzle(this.groupId,this.puzzlePackage._id, this.moves, this.puzzleNumber).subscribe();
+    console.log(this.puzzleNumber, this.puzzlePackage.puzzles.length - 1);
+    if(this.puzzleNumber >= this.puzzlePackage.puzzles.length-1){
+      this.allSolved = true;
+    }
+
   }
 
   onSnapEnd = () => {
@@ -109,6 +135,9 @@ export class PuzzleSolveComponent implements OnInit {
   }
 
   nextPuzzle() {
+    if (this.allSolved){
+      this.router.navigate(['puzzles']);
+    }
     this.puzzleNumber++;
     this.moveNumber=0;
     this.moves=[];

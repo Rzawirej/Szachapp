@@ -28,4 +28,12 @@ export class PuzzleCoachHttpService {
   deletePuzzlePackage(id: string) {
     return this.http.delete<any>('http://localhost:5000/api/puzzle-packages/' + id);
   }
+
+  getAnswersPuzzlePackage(groupId: string, puzzlePackageId: string) {
+    return this.http.get<any>('http://localhost:5000/api/groups/' + groupId + '/answer-puzzle-package/' + puzzlePackageId);
+  }
+
+  answerPuzzle(groupId: string, puzzlePackageId: string, answer: string[], puzzleNumber: number) {
+    return this.http.put<any>('http://localhost:5000/api/groups/' + groupId +'/answer-puzzle-package/'+ puzzlePackageId, { answer: answer, puzzleNumber: puzzleNumber });
+  }
 }

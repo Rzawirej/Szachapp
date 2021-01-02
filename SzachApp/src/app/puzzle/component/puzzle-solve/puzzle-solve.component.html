@@ -1,4 +1,4 @@
-<h1 class="header">Podaj rozwiązanie</h1>
+<h1 class="header">{{puzzlePackage.name}} {{puzzleNumber+1}} z {{puzzlePackage.puzzles.length}}</h1>
 <div class="flex-row" style="padding: 20px;">
   <div>
     <div id="answer-board" style="width:400px"></div>
@@ -19,7 +19,7 @@
 
       <ng-template #badAnswer>
         <button mat-flat-button color="warn" (click)="nextPuzzle()">
-          <span>Kolejne zadanie</span>
+          <span>{{allSolved ? 'Ukończono paczkę' : 'Kolejne zadanie'}}</span>
         </button>
       </ng-template>
 
