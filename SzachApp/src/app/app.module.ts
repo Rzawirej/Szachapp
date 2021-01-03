@@ -25,6 +25,9 @@ import { GroupAssignComponent } from './group/components/group-assign/group-assi
 import { SzachappListComponent } from './shared/components/szachapp-list/szachapp-list.component';
 import { DebutWatchComponent } from './debut/components/debut-watch/debut-watch.component';
 import { PuzzleSolveComponent } from './puzzle/component/puzzle-solve/puzzle-solve.component';
+import { ParticipantAnswersComponent } from './group/components/group-participants/participant-answers/participant-answers.component';
+import { GroupPuzzlePackagesComponent } from './group/components/group-puzzle-packages/group-puzzle-packages.component';
+import { GroupPuzzlePackageAnswersComponent } from './group/components/group-puzzle-packages/group-puzzle-package-answers/group-puzzle-package-answers.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +50,10 @@ import { PuzzleSolveComponent } from './puzzle/component/puzzle-solve/puzzle-sol
     GroupAssignComponent,
     SzachappListComponent,
     DebutWatchComponent,
-    PuzzleSolveComponent
+    PuzzleSolveComponent,
+    ParticipantAnswersComponent,
+    GroupPuzzlePackagesComponent,
+    GroupPuzzlePackageAnswersComponent
   ],
   imports: [
     BrowserModule,

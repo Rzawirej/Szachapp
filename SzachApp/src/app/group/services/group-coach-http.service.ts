@@ -12,6 +12,10 @@ export class GroupCoachHttpService {
     return this.http.get<any>('http://localhost:5000/api/groups');
   }
 
+  getGroupPuzzlePackages(groupId: string) {
+    return this.http.get<any>('http://localhost:5000/api/groups/puzzlePackages/'+groupId);
+  }
+
   getParticipantGroups() {
     return this.http.get<any>('http://localhost:5000/api/groups/participantGroups');
   }
@@ -88,5 +92,17 @@ export class GroupCoachHttpService {
       }
     }
     return this.http.get<any>('http://localhost:5000/api/groups', {params});
+  }
+
+  getParticipantAnswers(groupId: string, participantId: string){
+    return this.http.get<any>('http://localhost:5000/api/groups/participants/'+groupId+'/answers/'+participantId);
+  }
+
+  getPuzzlePackageAnswers(groupId: string, puzzlePackageId: string){
+    return this.http.get<any>('http://localhost:5000/api/groups/'+groupId+'/answer-puzzle-package/'+puzzlePackageId);
+  }
+
+  leaveGroup(groupId: string){
+    return this.http.put<any>('http://localhost:5000/api/groups/leave/'+groupId, {});
   }
 }

@@ -1,0 +1,23 @@
+<h1 class="header">{{puzzlePackage.name}} {{puzzleNumber+1}} z {{puzzlePackage.puzzles.length}}</h1>
+<div class="flex-row" style="padding: 20px;">
+  <div>
+    <div id="answer-board" style="width:400px"></div>
+    <div class="center">
+      <button mat-flat-button color="accent" (click)="prevMove()">
+        <span>Cofnij ruch</span>
+      </button>
+      <button mat-flat-button color="accent" (click)="prevPuzzle()">
+        <span>Poprzednie zadanie</span>
+      </button>
+      <button mat-flat-button color="accent" (click)="nextPuzzle()">
+        <span>Następne zadanie</span>
+      </button>
+    </div>
+
+  </div>
+
+  <div style="width: 90%">
+    <app-szachapp-list [items]="list" [menuItems]="[]" mainInfoLabel="Uczestnik" secondaryInfoLabel="Rozwiązanie"></app-szachapp-list>
+  </div>
+
+</div>

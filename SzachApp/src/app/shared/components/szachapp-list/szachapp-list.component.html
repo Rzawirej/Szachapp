@@ -8,8 +8,11 @@
         <h4 matLine>
           {{secondaryInfoLabel}}: {{item.secondaryInfo}}
         </h4>
-        <button mat-raised-button color="accent" [matMenuTriggerFor]="menu">
+        <button mat-raised-button color="accent" [matMenuTriggerFor]="menu" *ngIf='menuItems.length > 1'>
           Akcje
+        </button>
+        <button mat-raised-button color="accent" (click)="menuItems[0].handler(item)" *ngIf='menuItems.length === 1'>
+          {{menuItems[0].description}}
         </button>
         <mat-divider></mat-divider>
         <mat-menu #menu="matMenu">

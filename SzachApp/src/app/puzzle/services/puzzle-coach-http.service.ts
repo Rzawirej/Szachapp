@@ -30,7 +30,7 @@ export class PuzzleCoachHttpService {
   }
 
   getAnswersPuzzlePackage(groupId: string, puzzlePackageId: string) {
-    return this.http.get<any>('http://localhost:5000/api/groups/' + groupId + '/answer-puzzle-package/' + puzzlePackageId);
+    return this.http.get<any>('http://localhost:5000/api/groups/' + groupId + '/answer-participant/' + puzzlePackageId);
   }
 
   answerPuzzle(groupId: string, puzzlePackageId: string, answer: string[], puzzleNumber: number) {

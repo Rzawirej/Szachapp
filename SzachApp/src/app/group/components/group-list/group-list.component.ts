@@ -75,6 +75,11 @@ export class GroupListComponent implements OnInit {
     this.router.navigate(['/participants/'+_id]);
   }
 
+  goToPuzzlePackages = (group: any) => {
+    const { _id } = group;
+    this.router.navigate(['group/'+_id+'/puzzlePackages']);
+  }
+
   openEditDialog = (group: any) => {
     const { _id } = group;
     const dialogRef = this.dialog.open(EditGroupDialog);
@@ -109,13 +114,20 @@ export class GroupListComponent implements OnInit {
   }
 
   leaveGroup = (group: any) => {
-    console.log('leave');
+    const { _id } = group;
+    this.groupCoachHttpService.leaveGroup(_id).subscribe(() => {
+      this.participantGroups = this.participantGroups.filter((value) => _id !== value._id)
+    })
   }
 
   readonly coachMenuItems = [
     {
       description: 'Uczestnicy',
       handler: this.goToParticipants
+    },
+    {
+      description: 'Paczki zadań',
+      handler: this.goToPuzzlePackages
     },
     {
       description: 'Zmień nazwę',

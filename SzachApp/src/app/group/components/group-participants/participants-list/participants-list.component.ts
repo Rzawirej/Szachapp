@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GroupCoachHttpService } from 'src/app/group/services/group-coach-http.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-participants-list',
@@ -16,7 +16,8 @@ export class ParticipantsListComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private groupCoachHttpServive: GroupCoachHttpService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -62,12 +63,21 @@ export class ParticipantsListComponent implements OnInit {
     });
   }
 
+  goToAnswers = (participant: any) => {
+    const { _id } = participant;
+    this.router.navigate(['/participants/'+this.groupId+'/answers/'+_id]);
+  }
+
   deleteParticipant = (participant: any) => {
     const {email, _id} = participant;
     this.groupCoachHttpServive.deleteParticipant(this.groupId, email).subscribe((participants) => this.participants = this.participants.filter((value) => _id !== value._id));
   }
 
   readonly menuItems = [
+    {
+      description: 'Rozwiązania',
+      handler: this.goToAnswers
+    },
     {
       description: 'Usuń',
       handler: this.deleteParticipant
