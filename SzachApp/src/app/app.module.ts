@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { activeGroupReducer } from './shared/store/reducers/active-group.reducer';
+import { accountReducer } from './shared/store/reducers/account.reducer';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -28,6 +29,8 @@ import { PuzzleSolveComponent } from './puzzle/component/puzzle-solve/puzzle-sol
 import { ParticipantAnswersComponent } from './group/components/group-participants/participant-answers/participant-answers.component';
 import { GroupPuzzlePackagesComponent } from './group/components/group-puzzle-packages/group-puzzle-packages.component';
 import { GroupPuzzlePackageAnswersComponent } from './group/components/group-puzzle-packages/group-puzzle-package-answers/group-puzzle-package-answers.component';
+import { LoginComponent } from './account/components/login/login.component';
+import { RegisterComponent } from './account/components/register/register.component';
 
 @NgModule({
   declarations: [
@@ -53,12 +56,14 @@ import { GroupPuzzlePackageAnswersComponent } from './group/components/group-puz
     PuzzleSolveComponent,
     ParticipantAnswersComponent,
     GroupPuzzlePackagesComponent,
-    GroupPuzzlePackageAnswersComponent
+    GroupPuzzlePackageAnswersComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot({ activeGroup: activeGroupReducer }),
+    StoreModule.forRoot({ activeGroup: activeGroupReducer, account: accountReducer }),
     BrowserAnimationsModule,
     MaterialModule,
     HttpClientModule,

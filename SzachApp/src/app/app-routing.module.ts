@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { LoginComponent } from './account/components/login/login.component';
 import { DebutListComponent } from './debut/components/debut-list/debut-list.component';
 import { DebutTrainingComponent } from './debut/components/debut-training/debut-training.component';
 import { DebutWatchComponent } from './debut/components/debut-watch/debut-watch.component';
@@ -13,22 +14,25 @@ import { CoachNewsComponent } from './news/components/coach-news/coach-news.comp
 import { AddPuzzleComponent } from './puzzle/component/add-puzzle/add-puzzle.component';
 import { PuzzleListComponent } from './puzzle/component/puzzle-list/puzzle-list.component';
 import { PuzzleSolveComponent } from './puzzle/component/puzzle-solve/puzzle-solve.component';
+import { AuthGuard } from './auth/auth.guard';
 
 
 const routes: Routes = [
-  { path: 'debut/:debutId', component: DebutWatchComponent },
-  { path: 'debut', component: DebutListComponent },
-  { path: 'new-debut', component: DebutTrainingComponent },
-  { path: 'news', component: CoachNewsComponent },
-  { path: 'puzzles/:puzzlePackageId', component: PuzzleSolveComponent },
-  { path: 'puzzles', component: PuzzleListComponent },
-  { path: 'new-puzzles', component: AddPuzzleComponent},
-  { path: 'participants/:groupId', component: ParticipantsListComponent},
-  { path: 'group/:groupId/puzzlePackages/:puzzlePackageId', component: GroupPuzzlePackageAnswersComponent},
-  { path: 'group/:groupId/puzzlePackages', component: GroupPuzzlePackagesComponent },
-  { path: 'participants/:groupId/answers/:participantId', component: ParticipantAnswersComponent },
-  { path: 'group-assign', component: GroupAssignComponent},
-  { path: '', component: GroupListComponent },
+  { path: 'debut/:debutId', component: DebutWatchComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: LoginComponent },
+  { path: 'debut', component: DebutListComponent, canActivate: [AuthGuard] },
+  { path: 'new-debut', component: DebutTrainingComponent, canActivate: [AuthGuard] },
+  { path: 'news', component: CoachNewsComponent, canActivate: [AuthGuard] },
+  { path: 'puzzles/:puzzlePackageId', component: PuzzleSolveComponent, canActivate: [AuthGuard] },
+  { path: 'puzzles', component: PuzzleListComponent, canActivate: [AuthGuard] },
+  { path: 'new-puzzles', component: AddPuzzleComponent, canActivate: [AuthGuard]},
+  { path: 'participants/:groupId', component: ParticipantsListComponent, canActivate: [AuthGuard]},
+  { path: 'group/:groupId/puzzlePackages/:puzzlePackageId', component: GroupPuzzlePackageAnswersComponent, canActivate: [AuthGuard]},
+  { path: 'group/:groupId/puzzlePackages', component: GroupPuzzlePackagesComponent, canActivate: [AuthGuard]},
+  { path: 'participants/:groupId/answers/:participantId', component: ParticipantAnswersComponent, canActivate: [AuthGuard] },
+  { path: 'group-assign', component: GroupAssignComponent, canActivate: [AuthGuard]},
+  { path: '', component: GroupListComponent, canActivate: [AuthGuard] },
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
