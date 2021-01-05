@@ -11,9 +11,10 @@ import { logout } from '../shared/store/actions/account.action';
 export class ToolbarComponent implements OnInit {
 
   activeGroup$: Observable<string>;
-  account$: Observable<string>
+  account$: Observable<any>
   groupName = '';
   token = '';
+  nameSurname = '';
 
   constructor(private store: Store<any>, private router: Router) {
     this.activeGroup$ = store.select('activeGroup');
@@ -22,11 +23,12 @@ export class ToolbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.activeGroup$.subscribe(() => this.groupName = localStorage.getItem('activeGroupName'));
-    this.account$.subscribe((token) => this.token=token);
+    this.account$.subscribe((data) => {this.token=data.token; this.nameSurname = data.nameSurname});
   }
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('nameSurname');
     localStorage.removeItem('activeGroup');
     localStorage.removeItem('activeGroupName');
     this.store.dispatch(logout());

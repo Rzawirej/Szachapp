@@ -1,1 +1,43 @@
-<p>register works!</p>
+<mat-card style="width:50%" class="center2">
+  <mat-card-header>
+    <mat-card-title>
+      Załóż konto
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form>
+      <mat-form-field appearance="fill" style="width:100%">
+        <mat-label>Imię</mat-label>
+        <input matInput [(ngModel)]="name" name="name" required>
+      </mat-form-field>
+      <mat-form-field appearance="fill" style="width:100%">
+        <mat-label>Nazwisko</mat-label>
+        <input matInput [(ngModel)]="surname" name="surname" required>
+      </mat-form-field>
+      <mat-form-field appearance="fill" style="width:100%">
+        <mat-label>Email</mat-label>
+        <input matInput [formControl]="email" name="email" required>
+        <mat-error>Niepoprawny email</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill" style="width:100%">
+        <mat-label>Hasło</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" [(ngModel)]="password" name="password" required>
+        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Schowaj hasło'"
+          [attr.aria-pressed]="hidePassword">
+          <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+
+    </form>
+    <span style="color: red; font-size: large;">
+      {{this.emailExists ? 'Istnieje konto z takim adresem email' : ''}}
+    </span>
+
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-raised-button (click)="register()" color="accent">Załóż konto</button>
+    <button mat-raised-button routerLink="/login" color="primary">Przejdź do logowania</button>
+  </mat-card-actions>
+
+</mat-card>

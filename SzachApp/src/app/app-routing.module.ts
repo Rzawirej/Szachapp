@@ -15,11 +15,13 @@ import { AddPuzzleComponent } from './puzzle/component/add-puzzle/add-puzzle.com
 import { PuzzleListComponent } from './puzzle/component/puzzle-list/puzzle-list.component';
 import { PuzzleSolveComponent } from './puzzle/component/puzzle-solve/puzzle-solve.component';
 import { AuthGuard } from './auth/auth.guard';
+import { RegisterComponent } from './account/components/register/register.component';
 
 
 const routes: Routes = [
   { path: 'debut/:debutId', component: DebutWatchComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
   { path: 'debut', component: DebutListComponent, canActivate: [AuthGuard] },
   { path: 'new-debut', component: DebutTrainingComponent, canActivate: [AuthGuard] },
   { path: 'news', component: CoachNewsComponent, canActivate: [AuthGuard] },
