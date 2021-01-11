@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { logout } from '../shared/store/actions/account.action';
+import { logout } from '../store/actions/account.action';
 
 @Component({
   selector: 'app-toolbar',

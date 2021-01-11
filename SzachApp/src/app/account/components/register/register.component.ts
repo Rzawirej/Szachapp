@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { login } from 'src/app/shared/store/actions/account.action';
+import { login } from 'src/app/store/actions/account.action';
 import { LoginRegisterService } from '../../services/login-register.service';
 
 @Component({

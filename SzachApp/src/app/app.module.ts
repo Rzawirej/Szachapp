@@ -1,8 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { activeGroupReducer } from './shared/store/reducers/active-group.reducer';
-import { accountReducer } from './shared/store/reducers/account.reducer';
+import { activeGroupReducer } from './store/reducers/active-group.reducer';
+import { accountReducer } from './store/reducers/account.reducer';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';

@@ -3,7 +3,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { GroupCoachHttpService } from '../../services/group-coach-http.service';
-import { save, remove } from '../../../shared/store/actions/active-group.action';
+import { save, remove } from '../../../store/actions/active-group.action';
 
 @Component({
   selector: 'app-group-list',
