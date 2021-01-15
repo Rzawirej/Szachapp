@@ -14,7 +14,8 @@ export class LoginComponent implements OnInit {
   hidePassword = true;
   email: string;
   password: string;
-  token: ''
+  token: '';
+  badLogin = false;
 
   constructor(private loginRegisterService: LoginRegisterService, private router: Router, private store: Store<any>) { }
 
@@ -27,12 +28,19 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-
+    this.badLogin = false;
     this.loginRegisterService.login(this.email, this.password).subscribe((response) => {
       localStorage.setItem('token', response.token);
       localStorage.setItem('nameSurname', response.nameSurname);
       this.store.dispatch(login());
       this.router.navigate(['/']);
+    }, (errorInfo) => {
+      console.log(errorInfo.error);
+      switch (errorInfo.error) {
+        case 'Invalid email or password.':
+          console.log(1);
+          this.badLogin = true;
+      }
     });
   }
 }

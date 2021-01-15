@@ -84,14 +84,16 @@ export class GroupListComponent implements OnInit {
     const { _id } = group;
     const dialogRef = this.dialog.open(EditGroupDialog);
     dialogRef.afterClosed().subscribe(result => {
-      this.groupCoachHttpService.editGroupName(_id, result).subscribe((oldGroup) => {
-        for(let i = 0; i<this.coachGroups.length; i++){
-          if(this.coachGroups[i]._id === oldGroup._id){
-            this.coachGroups[i].name = result;
+      if(result){
+        this.groupCoachHttpService.editGroupName(_id, result).subscribe((oldGroup) => {
+          for (let i = 0; i < this.coachGroups.length; i++) {
+            if (this.coachGroups[i]._id === oldGroup._id) {
+              this.coachGroups[i].name = result;
+            }
           }
-        }
-        this.transformCoachGroupsToSzachappList();
-      });
+          this.transformCoachGroupsToSzachappList();
+        });
+      }
     });
   }
 

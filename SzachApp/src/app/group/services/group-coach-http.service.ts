@@ -29,12 +29,12 @@ export class GroupCoachHttpService {
   }
 
   addParticipant(groupId: string, email: string) {
-    return this.http.put<any>('http://localhost:5000/api/groups/participants/' + groupId, { participant: email });
+    return this.http.patch<any>('http://localhost:5000/api/groups/participants/' + groupId, { participant: email });
   }
 
   deleteParticipant(groupId: string, email: string){
     const params = new HttpParams().set('isDel', 'true');
-    return this.http.put<any>('http://localhost:5000/api/groups/participants/' + groupId, {participant: email}, {params});
+    return this.http.patch<any>('http://localhost:5000/api/groups/participants/' + groupId, {participant: email}, {params});
   }
 
   deleteGroup(id: string) {
@@ -42,20 +42,20 @@ export class GroupCoachHttpService {
   }
 
   editGroupName(groupId: string, name: string) {
-    return this.http.put<any>('http://localhost:5000/api/groups/' + groupId, { name: name });
+    return this.http.patch<any>('http://localhost:5000/api/groups/' + groupId, { name: name });
   }
 
   assignToGroup(groupId: string, id: string, type: string){
     switch (type) {
       case 'news': {
-        return this.http.put<any>('http://localhost:5000/api/groups/assign-news/' + groupId, { news: id });
+        return this.http.patch<any>('http://localhost:5000/api/groups/assign-news/' + groupId, { news: id });
       }
       case 'debut': {
         console.log(groupId, id, type);
-        return this.http.put<any>('http://localhost:5000/api/groups/assign-debut/' + groupId, { debut: id });
+        return this.http.patch<any>('http://localhost:5000/api/groups/assign-debut/' + groupId, { debut: id });
       }
       case 'puzzle': {
-        return this.http.put<any>('http://localhost:5000/api/groups/assign-puzzle-package/' + groupId, { puzzlePackage: id });
+        return this.http.patch<any>('http://localhost:5000/api/groups/assign-puzzle-package/' + groupId, { puzzlePackage: id });
       }
     }
   }
@@ -64,13 +64,13 @@ export class GroupCoachHttpService {
     const params = new HttpParams().set('isDel', 'true');
     switch (type) {
       case 'news': {
-        return this.http.put<any>('http://localhost:5000/api/groups/assign-news/' + groupId, { news: id }, { params });
+        return this.http.patch<any>('http://localhost:5000/api/groups/assign-news/' + groupId, { news: id }, { params });
       }
       case 'debut': {
-        return this.http.put<any>('http://localhost:5000/api/groups/assign-debut/' + groupId, { debut: id }, { params });
+        return this.http.patch<any>('http://localhost:5000/api/groups/assign-debut/' + groupId, { debut: id }, { params });
       }
       case 'puzzle': {
-        return this.http.put<any>('http://localhost:5000/api/groups/assign-puzzle-package/' + groupId, { puzzlePackage: id }, { params });
+        return this.http.patch<any>('http://localhost:5000/api/groups/assign-puzzle-package/' + groupId, { puzzlePackage: id }, { params });
       }
     }
   }
@@ -103,6 +103,6 @@ export class GroupCoachHttpService {
   }
 
   leaveGroup(groupId: string){
-    return this.http.put<any>('http://localhost:5000/api/groups/leave/'+groupId, {});
+    return this.http.patch<any>('http://localhost:5000/api/groups/leave/'+groupId, {});
   }
 }

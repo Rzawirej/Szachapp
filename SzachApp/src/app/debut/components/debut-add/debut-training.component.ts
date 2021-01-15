@@ -9,7 +9,7 @@ import { MoveInfo } from '../../models/move-info';
 import { ParsedGame } from '../../models/parsed-game';
 import { ParsedMove } from '../../models/parsed-move';
 import { DebutBoardService } from '../../services/debut-board.service';
-import { DebutCoachHttpService } from '../../services/debut-coach-http.service';
+import { DebutCoachHttpService } from '../../services/debut-http.service';
 declare var ChessBoard: any;
 
 
@@ -31,6 +31,7 @@ export class DebutTrainingComponent implements OnInit {
   gameState: GameState;
   fileLoaded = false;
   fileError = false;
+  whiteColor = true;
 
   constructor(
     private debutBoardService: DebutBoardService,
@@ -97,7 +98,7 @@ export class DebutTrainingComponent implements OnInit {
 
   saveDebut(){
     if (this.checkoutForm.value.name !== ''){
-      const debut: Debut = {name:this.checkoutForm.value.name, color: 'w', pgn: this.parsedGames};
+      const debut: Debut = {name:this.checkoutForm.value.name, color: this.whiteColor?'w':'b', pgn: this.parsedGames};
       this.debutCoachHttpService.saveDebut(debut).subscribe((data)=>{
         this.router.navigate(['debut']);
       });
@@ -108,6 +109,11 @@ export class DebutTrainingComponent implements OnInit {
     const [highlightId, fen] = this.debutBoardService.undoMove(this.gameState);
     this.highlight = highlightId;
     this.board.position(fen);
+  }
+
+  flipBoard(): void{
+    this.board.flip();
+    this.whiteColor = !this.whiteColor;
   }
 
   nextMove(): void{

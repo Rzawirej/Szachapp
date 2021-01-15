@@ -6,7 +6,7 @@ import { accountReducer } from './store/reducers/account.reducer';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DebutTrainingComponent } from './debut/components/debut-training/debut-training.component';
+import { DebutTrainingComponent } from './debut/components/debut-add/debut-training.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';

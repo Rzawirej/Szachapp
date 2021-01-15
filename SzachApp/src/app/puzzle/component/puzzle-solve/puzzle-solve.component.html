@@ -13,18 +13,23 @@
     </mat-card>
 
     <span *ngIf="puzzleEnded === true">
-      <button mat-flat-button color="accent" (click)="nextPuzzle()" *ngIf="goodAnswer === true; else badAnswer">
-        <span>Kolejne zadanie</span>
-      </button>
-
+      <ng-container *ngIf="goodAnswer === true; else badAnswer">
+        <button mat-flat-button color="accent" (click)="nextPuzzle()">
+          <span>{{allSolved ? 'Ukończono paczkę' : 'Kolejne zadanie'}}</span>
+        </button>
+        <span style="color: green; font-size: large;">
+          DOBRZE
+        </span>
+      </ng-container>
       <ng-template #badAnswer>
         <button mat-flat-button color="warn" (click)="nextPuzzle()">
           <span>{{allSolved ? 'Ukończono paczkę' : 'Kolejne zadanie'}}</span>
         </button>
+        <span style="color: red; font-size: large;">
+          ŹLE
+        </span>
       </ng-template>
-
     </span>
-
   </div>
 
 </div>

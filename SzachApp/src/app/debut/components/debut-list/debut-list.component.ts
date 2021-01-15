@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DebutCoachHttpService } from '../../services/debut-coach-http.service';
+import { DebutCoachHttpService } from '../../services/debut-http.service';
 
 @Component({
   selector: 'app-debut-list',
@@ -35,7 +35,7 @@ export class DebutListComponent implements OnInit {
   transformItemToSharedListItem(item: any) {
     item.icon = 'check';
     item.mainInfo = item.name;
-    item.secondaryInfo = item.color;
+    item.secondaryInfo = item.color === 'w' ? 'Białe' : 'Czarne';
     return item;
   }
 
@@ -58,6 +58,10 @@ export class DebutListComponent implements OnInit {
     {
       description: 'Przypisz do grupy',
       handler: this.goToAssign
+    },
+    {
+      description: 'Przeglądaj',
+      handler: this.goToDebut
     },
     {
       description: 'Usuń',

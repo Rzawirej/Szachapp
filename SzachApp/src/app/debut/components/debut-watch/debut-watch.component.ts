@@ -7,7 +7,7 @@ import { MoveInfo } from '../../models/move-info';
 import { ParsedGame } from '../../models/parsed-game';
 import { ParsedMove } from '../../models/parsed-move';
 import { DebutBoardService } from '../../services/debut-board.service';
-import { DebutCoachHttpService } from '../../services/debut-coach-http.service';
+import { DebutCoachHttpService } from '../../services/debut-http.service';
 
 declare var ChessBoard: any;
 
@@ -55,10 +55,11 @@ export class DebutWatchComponent implements OnInit {
       this.debutCoachHttpService.getDebut(params['debutId']).subscribe((debut) => {
         this.debut=debut;
         this.gameToMoveArray();
+        this.initChessboard();
       });
     });
     this.initGameState();
-    this.initChessboard();
+
   }
 
   private initGameState(): void {
@@ -72,9 +73,11 @@ export class DebutWatchComponent implements OnInit {
   }
 
   private initChessboard() {
+    console.log(this.debut);
     const config = {
       draggable: false,
       position: 'start',
+      orientation: this.debut.color === 'w' ? 'white' : 'black'
     }
     this.board = ChessBoard('debut-board', config)
   }

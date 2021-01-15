@@ -34,6 +34,6 @@ export class PuzzleCoachHttpService {
   }
 
   answerPuzzle(groupId: string, puzzlePackageId: string, answer: string[], puzzleNumber: number) {
-    return this.http.put<any>('http://localhost:5000/api/groups/' + groupId +'/answer-puzzle-package/'+ puzzlePackageId, { answer: answer, puzzleNumber: puzzleNumber });
+    return this.http.patch<any>('http://localhost:5000/api/groups/' + groupId +'/answer-puzzle-package/'+ puzzlePackageId, { answer: answer, puzzleNumber: puzzleNumber });
   }
 }
